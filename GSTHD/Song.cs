@@ -149,6 +149,10 @@ namespace GSTHD
                 DragBehaviour.Mouse_Move(sender, e);
             }
         }
+        public void HandleMouseWheel(object sender, MouseEventArgs e)
+        {
+            return;
+        }
 
         public void Mouse_DragDrop(object sender, DragEventArgs e)
         {
@@ -369,6 +373,11 @@ namespace GSTHD
         private void Mouse_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = e.AllowedEffect;
+        }
+
+        public void HandleMouseWheel(object sender, MouseEventArgs e)
+        {
+            return;
         }
 
         public int GetState()

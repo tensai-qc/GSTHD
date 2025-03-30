@@ -92,6 +92,11 @@ namespace GSTHD
             }
         }
 
+        public void HandleMouseWheel(object sender, MouseEventArgs e)
+        {
+            return;
+        }
+
         private void UpdateImage()
         {
             if (HoldsImage)

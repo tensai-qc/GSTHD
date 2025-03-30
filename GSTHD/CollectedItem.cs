@@ -15,14 +15,20 @@ namespace GSTHD
         private readonly DraggableAutocheckElementBehaviour<int> DragBehaviour;
 
         private string[] ImageNames;
+        private int ImageIndex = 0;
         private Label ItemCount;
         private Size CollectedItemSize;
         private Size CollectedItemCountPosition;
+        private bool HideMin = false;
         private readonly int CollectedItemMin;
         private readonly int CollectedItemMax;
         private readonly int CollectedItemDefault;
         private int CollectedItems;
         private readonly int Step;
+        private int StepIndex = 0;
+        private readonly int[] Steps;
+        private Color LabelColor;
+        private Color CountMaxLabelColor;
 
         public CollectedItem(ObjectPointCollectedItem data, Settings settings)
         {
@@ -33,12 +39,16 @@ namespace GSTHD
             else
                 ImageNames = data.ImageCollection;
 
-            CollectedItemMin = data.CountMin;
-            CollectedItemMax = data.CountMax.HasValue ? data.CountMax.Value : 100;
-            CollectedItemDefault = data.DefaultValue;
-            CollectedItems = System.Math.Min(System.Math.Max(CollectedItemMin, CollectedItemDefault), CollectedItemMax);
+            Steps = data.Steps;
+            CollectedItemMin = Steps != null ? Steps[0] : data.CountMin;
+            CollectedItemMax = Steps != null ? Steps[Steps.Length - 1] : data.CountMax.HasValue ? data.CountMax.Value : 100;
+            CollectedItemDefault = Steps != null ? Steps[0] : data.DefaultValue;
             Step = data.Step == 0 ? 1 : data.Step;
+            CollectedItems = Steps != null ? Steps[0] : System.Math.Min(System.Math.Max(CollectedItemMin, CollectedItemDefault), CollectedItemMax);
+            HideMin = data.HideMin;
             CollectedItemSize = data.Size;
+            LabelColor = data.LabelColor;
+            CountMaxLabelColor = data.CountMaxLabelColor;
 
             if (ImageNames.Length > 0)
             {
@@ -61,7 +71,7 @@ namespace GSTHD
             {
                 BackColor = Color.Transparent,
                 BorderStyle = BorderStyle.None,
-                Text = CollectedItems.ToString(),
+                Text = HideMin == true && CollectedItems == CollectedItemMin ? "" : CollectedItems.ToString(),
                 Font = new Font(data.LabelFontName, data.LabelFontSize, data.LabelFontStyle),
                 ForeColor = data.LabelColor,
                 AutoSize = false,
@@ -87,19 +97,49 @@ namespace GSTHD
 
         private void Mouse_Wheel(object sender, MouseEventArgs e)
         {
+            ProgressBehaviour.HandleMouseWheel(sender, e);
+            DragBehaviour.HandleMouseWheel(sender, e);
+        }
+        public void HandleMouseWheel(object sender, MouseEventArgs e)
+        {
             if (e.Delta != 0)
             {
                 var scrolls = e.Delta / SystemInformation.MouseWheelScrollDelta;
-                CollectedItems += Step * (Settings.InvertScrollWheel ? scrolls : -scrolls);
-                if (CollectedItems < CollectedItemMin) CollectedItems = CollectedItemMin;
-                else if (CollectedItems > CollectedItemMax) CollectedItems = CollectedItemMax;
+                if (Steps != null)
+                {
+                    StepIndex += Step * (Settings.InvertScrollWheel ? scrolls : -scrolls);
+                    if (StepIndex < 0) StepIndex = 0;
+                    if (StepIndex > Steps.Length - 1) StepIndex = Steps.Length - 1;
+                    CollectedItems = Steps[StepIndex];
+                }
+                else
+                {
+                    CollectedItems += Step * (Settings.InvertScrollWheel ? scrolls : -scrolls);
+                    if (CollectedItems < CollectedItemMin) CollectedItems = CollectedItemMin;
+                    else if (CollectedItems > CollectedItemMax) CollectedItems = CollectedItemMax;
+                }
                 UpdateCount();
+                if ((Steps != null || CollectedItems == CollectedItemMin) && ImageIndex > 0) ImageIndex -= 1;
+                if (CollectedItems > CollectedItemMin && ImageIndex < ImageNames.Length - 1) ImageIndex += 1;
+                UpdateImage();
             }
         }
 
         private void UpdateCount()
         {
-            ItemCount.Text = CollectedItems.ToString();
+            if (HideMin == true && CollectedItems == CollectedItemMin) ItemCount.Text = "";
+            else ItemCount.Text = CollectedItems.ToString();
+            if (CollectedItems == CollectedItemMax) ItemCount.ForeColor = CountMaxLabelColor;
+            else ItemCount.ForeColor = LabelColor;
+            if (Steps != null)
+            {
+                StepIndex = Array.FindIndex(Steps, item => item == CollectedItems);
+            }
+        }
+
+        private void UpdateImage()
+        {
+            Image = Image.FromFile(@"Resources/" + ImageNames[ImageIndex]);
         }
 
         public int GetState()
@@ -111,35 +151,77 @@ namespace GSTHD
         {
             CollectedItems = state;
             UpdateCount();
+            if (state == CollectedItemMin) ImageIndex = 0;
+            UpdateImage();
         }
 
         public void IncrementState()
         {
-            CollectedItems += Step;
-            if (CollectedItems > CollectedItemMax) CollectedItems = CollectedItemMax;
+            if (Steps != null)
+            {
+                if (StepIndex < Steps.Length - 1) StepIndex++;
+                CollectedItems = Steps[StepIndex];
+            }
+            else
+            {
+                CollectedItems += Step;
+                if (CollectedItems > CollectedItemMax) CollectedItems = CollectedItemMax;
+            }
             UpdateCount();
+
+            if (ImageIndex < ImageNames.Length - 1) ImageIndex += 1;
+            UpdateImage();
         }
 
         public void DecrementState()
         {
-            CollectedItems -= Step;
-            if (CollectedItems < CollectedItemMin) CollectedItems = CollectedItemMin;
+            if (Steps != null)
+            {
+                if (StepIndex > 0) StepIndex--;
+                CollectedItems = Steps[StepIndex];
+            }
+            else
+            {
+                CollectedItems -= Step;
+                if (CollectedItems < CollectedItemMin) CollectedItems = CollectedItemMin;
+            }
             UpdateCount();
+
+            if ((Steps != null || CollectedItems == CollectedItemMin)
+                && ImageIndex > 0
+                && StepIndex < ImageNames.Length - 1)
+            {
+                ImageIndex -= 1;
+            }
+            UpdateImage();
         }
+
 
         public void ResetState()
         {
             CollectedItems = CollectedItemDefault;
+            StepIndex = 0;
             UpdateCount();
+
+            ImageIndex = 0;
+            UpdateImage();
         }
 
         public void StartDragDrop()
         {
-            var dropContent = new DragDropContent(DragBehaviour.AutocheckDragDrop, ImageNames[0]);
+            var dropContent = new DragDropContent(DragBehaviour.AutocheckDragDrop, ImageNames[ImageNames.Length > 1 ? 1 : 0]);
             DoDragDrop(dropContent, DragDropEffects.Copy);
         }
 
         public void SaveChanges() { }
-        public void CancelChanges() { }
+        public void CancelChanges()
+        {
+            if ((Steps != null || CollectedItems == CollectedItemMin) && ImageIndex > 0)
+            {
+                int stepIndex = Array.FindIndex(Steps, item => item == CollectedItems);
+                if (stepIndex >= ImageNames.Length) ImageIndex = ImageNames.Length - 1;
+                else ImageIndex = stepIndex;
+            }
+        }
     }
 }

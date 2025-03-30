@@ -95,9 +95,9 @@ namespace GSTHD
 
         public void UpdateFromSettings()
         {
-            MouseWheel -= Mouse_Wheel;
+            MouseWheel -= HandleMouseWheel;
             MouseWheel -= Mouse_Wheel_WithWraparound;
-            SelectedDungeon.MouseWheel -= Mouse_Wheel;
+            SelectedDungeon.MouseWheel -= HandleMouseWheel;
             SelectedDungeon.MouseWheel -= Mouse_Wheel_WithWraparound;
 
             if (Settings.DefaultDungeonNames.Wraparound.Value)
@@ -107,8 +107,8 @@ namespace GSTHD
             }
             else
             {
-                MouseWheel += Mouse_Wheel;
-                SelectedDungeon.MouseWheel += Mouse_Wheel;
+                MouseWheel += HandleMouseWheel;
+                SelectedDungeon.MouseWheel += HandleMouseWheel;
             }
         }
 
@@ -117,7 +117,7 @@ namespace GSTHD
             SelectedDungeon.Location = new Point(Location.X + Size.Width / 2 - SelectedDungeon.Width / 2, (int)(Location.Y + Size.Height * 0.75));
         }
 
-        private void Mouse_Wheel(object sender, MouseEventArgs e)
+        public void HandleMouseWheel(object sender, MouseEventArgs e)
         {
             if (e.Delta != 0)
             {

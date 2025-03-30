@@ -489,12 +489,15 @@ namespace GSTHD
         public int? CountMax { get; set; }
         public int DefaultValue { get; set; }
         public int Step { get; set; }
+        public int[] Steps { get; set; }
         public bool Visible { get; set; }
         public string[] ImageCollection { get; set; }
         public string LabelFontName { get; set; }
         public int LabelFontSize { get; set; }
         public FontStyle LabelFontStyle { get; set; }
         public Color LabelColor { get; set; }
+        public bool HideMin { get; set; }
+        public Color CountMaxLabelColor { get; set; }
     }
 
     public class LayoutSettings

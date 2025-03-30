@@ -8,6 +8,7 @@ namespace GSTHD
         void IncrementState();
         void DecrementState();
         void ResetState();
+        void HandleMouseWheel(object sender, MouseEventArgs e);
     }
 
     public class ProgressibleElementBehaviour<T>
@@ -50,6 +51,11 @@ namespace GSTHD
         public void Mouse_RightClickDown(object sender, MouseEventArgs e)
         {
             Element.DecrementState();
+        }
+
+        public void HandleMouseWheel(object sender, MouseEventArgs e)
+        {
+            Element.HandleMouseWheel(sender, e);
         }
     }
 }

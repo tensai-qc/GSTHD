@@ -8,7 +8,6 @@ namespace GSTHD
     {
         T GetState();
         void SetState(T state);
-
         void StartDragDrop();
         void SaveChanges();
         void CancelChanges();
@@ -130,6 +129,11 @@ namespace GSTHD
                 || ((Settings.DragButton == Settings.DragButtonOption.Middle || Settings.AutocheckDragButton == Settings.DragButtonOption.Middle) && MiddleClickDown);
             if (CanDragDrop)
                 DragStartPoint = Cursor.Position;
+        }
+
+        public void HandleMouseWheel(object sender, MouseEventArgs e)
+        {
+            SaveChanges();
         }
 
         public void SaveChanges()

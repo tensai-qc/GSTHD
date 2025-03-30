@@ -43,10 +43,10 @@ namespace GSTHD
             MouseDown += ProgressBehaviour.Mouse_ClickDown;
             MouseDown += DragBehaviour.Mouse_ClickDown;
             MouseMove += DragBehaviour.Mouse_Move_WithAutocheck;
-            MouseWheel += Mouse_Wheel;
+            MouseWheel += HandleMouseWheel;
         }
 
-        private void Mouse_Wheel(object sender, MouseEventArgs e)
+        public void HandleMouseWheel(object sender, MouseEventArgs e)
         {
             if (e.Delta != 0)
             {
