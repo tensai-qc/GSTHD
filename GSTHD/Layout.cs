@@ -546,6 +546,7 @@ namespace GSTHD
     {
         public int Width { get; set; }
         public int Height { get; set; }
+        public string BackgroundImage { get; set; }
         public Color? BackgroundColor { get; set; }
         public string[] DefaultSongMarkerImages { get; set; } = null;
         public string[] DefaultGossipStoneImages { get; set; } = null;

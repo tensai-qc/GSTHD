@@ -211,6 +211,16 @@ namespace GSTHD
             ActiveLayout.BackColor = BackColor;
         }
 
+        private void SetBackImage() 
+        {
+            if (ActiveLayout.Settings.BackgroundImage != null)
+            {
+                BackgroundImage = Image.FromFile(@"Resources/" + ActiveLayout.Settings.BackgroundImage);
+                ActiveLayout.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+                ActiveLayout.BackgroundImage = BackgroundImage;
+            }
+        }
+
         private void PostloadLayout()
         {
             ActiveLayout.Dock = DockStyle.Top;
@@ -222,6 +232,7 @@ namespace GSTHD
 
             Controls.Add(ActiveLayout);
             Controls.Add(MenuBar);
+            SetBackImage();
         }
 
         public void UpdateSettings()
@@ -242,6 +253,7 @@ namespace GSTHD
 
         public void Reset(object sender)
         {
+            ActiveLayout.BackgroundImage = null;
             ControlExtensions.ClearAndDispose(ActiveLayout);
             ReloadActiveLayout();
             Process.GetCurrentProcess().Refresh();
