@@ -83,6 +83,18 @@ namespace GSTHD
             {
                 switch (category.Key)
                 {
+                    case "Sometimes":
+                        listSometimesHintsSuggestions.Clear();
+                        JObject json_hints = JObject.Parse(File.ReadAllText(category.Value + ".json"));
+                        foreach (var categorie in json_hints)
+                        {
+                            foreach (var hint in categorie.Value)
+                            {
+                                listSometimesHintsSuggestions.Add(hint.ToString());
+                            }
+                        }
+                        break;
+
                     case "Labels":
                         foreach (var element in category.Value)
                         {
