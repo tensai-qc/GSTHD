@@ -20,6 +20,7 @@ namespace GSTHD
         private string[] ListImage_WothItemsOption;
         private int PathGoalCount;
         private string[] ListImage_GoalsOption;
+        private string[] WothColors;
         Size GossipStoneSize;
         int GossipStoneSpacing;
         int PathGoalSpacing;
@@ -37,6 +38,7 @@ namespace GSTHD
             this.Size = new Size(data.Width, data.Height);
             this.GossipStoneCount = data.GossipStoneCount.GetValueOrDefault(settings.DefaultWothGossipStoneCount);
             this.PathGoalCount = data.PathGoalCount.GetValueOrDefault(settings.DefaultPathGoalCount);
+            this.WothColors = data.WothColors != null ? data.WothColors : settings.DefaultWothColors;
             this.GossipStoneSpacing = data.GossipStoneSpacing;
             this.PathGoalSpacing = data.PathGoalSpacing;
             this.TabStop = false;
@@ -221,14 +223,14 @@ namespace GSTHD
                                 newWotH = new WotH(Settings, selectedPlace,
                                     GossipStoneCount, ListImage_WothItemsOption, GossipStoneSpacing, 
                                     PathGoalCount, ListImage_GoalsOption, PathGoalSpacing,
-                                    new Point(2, -LabelSettings.Height), LabelSettings, GossipStoneSize);
+                                    new Point(2, -LabelSettings.Height), LabelSettings, GossipStoneSize, WothColors);
                             else
                             {
                                 var lastLocation = ListWotH.Last().LabelPlace.Location;
                                 newWotH = new WotH(Settings, selectedPlace,
                                     GossipStoneCount, ListImage_WothItemsOption, GossipStoneSpacing,
                                     PathGoalCount, ListImage_GoalsOption, PathGoalSpacing,
-                                    lastLocation, LabelSettings, GossipStoneSize);
+                                    lastLocation, LabelSettings, GossipStoneSize, WothColors);
                             }
                             ListWotH.Add(newWotH);
                             this.Controls.Add(newWotH.LabelPlace);

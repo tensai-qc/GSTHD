@@ -435,6 +435,7 @@ namespace GSTHD
         public int? PathGoalCount { get; set; }
         public string[] PathGoalImageCollection { get; set; }
         public int PathGoalSpacing { get; set; }
+        public string[] WothColors { get; set; }
     }
 
     public class ObjectPanelBarren

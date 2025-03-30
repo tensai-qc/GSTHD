@@ -24,7 +24,7 @@ namespace GSTHD
             string selectedPlace,
             int gossipStoneCount, string[] wothItemImageList, int gossipStoneSpacing,
             int pathGoalCount, string[] pathGoalImageList, int pathGoalSpacing,
-            Point lastLabelLocation, Label labelSettings, Size gossipStoneSize)
+            Point lastLabelLocation, Label labelSettings, Size gossipStoneSize, string[] wothColors)
         {
             Settings = settings;
             Name = selectedPlace;
@@ -77,10 +77,10 @@ namespace GSTHD
                 }
             }
 
-            Colors = new Color[Settings.DefaultWothColors.Length + 1];
-            for (int i = 0; i < Settings.DefaultWothColors.Length; i++)
+            Colors = new Color[wothColors.Length + 1];
+            for (int i = 0; i < wothColors.Length; i++)
             {
-                Colors[i + 1] = Color.FromName(Settings.DefaultWothColors[i]);
+                Colors[i + 1] = Color.FromName(wothColors[i]);
             }
             ColorIndex = Settings.DefaultWothColorIndex + 1;
             UpdateFromSettings();
