@@ -12,7 +12,7 @@ namespace GSTHD
     class GoMode : PictureBox
     {
         List<string> ListImageName;
-        string BackgroundImage;        
+        private new string BackgroundImage;        
         Point FirstLocation;
         Timer tictac;
         int imageIndex = 0;
@@ -115,7 +115,6 @@ namespace GSTHD
             pbox.Image = Image.FromFile(@"Resources/" + ListImageName[imageIndex]);
             pbox.Name = ListImageName[imageIndex];
             pbox.Size = GoModeImageSize;
-            
 
             if (imageIndex <= 0)
             {
