@@ -245,7 +245,27 @@ namespace GSTHD
                         {
                             var obj = JsonConvert.DeserializeObject<AutoFillTextBox>(element.ToString());
                             if (obj.Visible)
-                                Controls.Add(new SometimesHint(listSometimesHintsSuggestions, obj));
+                            {
+                                if (obj.BorderWidth > 0)
+                                {
+                                    Panel Wrapper = new Panel();
+                                    Wrapper.BackColor = obj.BackColor;
+                                    Wrapper.Location = new Point(obj.BorderWidth/2, obj.BorderWidth/2);
+                                    Wrapper.Size = new Size(obj.Width - obj.BorderWidth, obj.Height - obj.BorderWidth);
+                                    Wrapper.BorderStyle = BorderStyle.None;
+                                    Wrapper.Controls.Add(new SometimesHint(listSometimesHintsSuggestions, obj, obj.BorderWidth));
+
+                                    Panel WrapperWrapper = new Panel();
+                                    WrapperWrapper.Size = new Size(obj.Width, obj.Height);
+                                    WrapperWrapper.Location = new Point(obj.X, obj.Y);
+                                    WrapperWrapper.BackColor = obj.BorderColor.IsEmpty ? Color.GhostWhite : obj.BorderColor;
+                                    WrapperWrapper.BorderStyle = BorderStyle.None;
+                                    WrapperWrapper.Controls.Add(Wrapper);
+
+                                    Controls.Add(WrapperWrapper);
+                                }
+                                else Controls.Add(new SometimesHint(listSometimesHintsSuggestions, obj, -1));
+                            }
                         }
                         break;
 
@@ -410,6 +430,8 @@ namespace GSTHD
         public Color FontColor { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public Color BorderColor { get; set; }
+        public int BorderWidth{ get; set; }
     }
 
     public class ObjectPanelWotH

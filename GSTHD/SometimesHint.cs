@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,12 +8,11 @@ namespace GSTHD
 {
     class SometimesHint : TextBox
     {
-        public SometimesHint(SortedSet<string> listSometimesHints, AutoFillTextBox textInput)
+        public SometimesHint(SortedSet<string> listSometimesHints, AutoFillTextBox textInput, int borderWidth)
         {
             this.BackColor = textInput.BackColor;
             this.Font = new Font(textInput.FontName, textInput.FontSize, textInput.FontStyle);
             this.ForeColor = textInput.FontColor;
-            this.Size = new Size(textInput.Width, textInput.Height);
             this.Name = textInput.Name;
 
             this.AutoCompleteCustomSource = new AutoCompleteStringCollection();
@@ -21,7 +21,17 @@ namespace GSTHD
 
             this.KeyDown += textBox_KeyDown;
             this.AutoCompleteCustomSource.AddRange(listSometimesHints.ToArray());
-            this.Location = new Point(textInput.X, textInput.Y);
+            if (borderWidth > 0)
+            {
+                this.BorderStyle = BorderStyle.None;
+                this.Size = new Size(textInput.Width - borderWidth, textInput.Height - borderWidth);
+                this.Location = new Point(4, textInput.Height - textInput.FontSize * 2 + Math.Max(4-borderWidth, 0));
+            }
+            else
+            {
+                this.Size = new Size(textInput.Width, textInput.Height);
+                this.Location = new Point(textInput.X, textInput.Y);
+            }
         }
 
         private void textBox_KeyDown(object sender, KeyEventArgs e)
@@ -29,7 +39,7 @@ namespace GSTHD
             if (e.KeyCode == Keys.Enter)
             {
                 var array = this.Parent.Controls.Find(this.Name + "_GossipStone", false);
-                if(array.Length > 0)
+                if (array.Length > 0)
                     ((GossipStone)array[0]).Mouse_ClickUp(sender, new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
                 ((TextBox)sender).SelectionStart = ((TextBox)sender).Text.Length;
             }
