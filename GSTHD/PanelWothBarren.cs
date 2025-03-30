@@ -301,9 +301,9 @@ namespace GSTHD
             for (int i = 0; i < ListBarren.Count; i++)
             {
                 var wothLabel = ListBarren[i].LabelPlace;
-                wothLabel.Location = new Point(2, (i * wothLabel.Height));
+                wothLabel.Location = new Point(0, (i * wothLabel.Height));
             }
-            textBoxCustom.newLocation(new Point(2, ListBarren.Count * barren.LabelPlace.Height), this.Location);
+            textBoxCustom.newLocation(new Point(0, ListBarren.Count * barren.LabelPlace.Height), this.Location);
         }
     }
 }
