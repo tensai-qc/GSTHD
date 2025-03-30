@@ -79,6 +79,8 @@ namespace GSTHD
         {
             activeSettings.SetLayoutSettings(Settings);
 
+            GoMode goMode = null;
+
             foreach (var category in Json)
             {
                 switch (category.Key)
@@ -250,7 +252,7 @@ namespace GSTHD
                                 {
                                     Panel Wrapper = new Panel();
                                     Wrapper.BackColor = obj.BackColor;
-                                    Wrapper.Location = new Point(obj.BorderWidth/2, obj.BorderWidth/2);
+                                    Wrapper.Location = new Point(obj.BorderWidth / 2, obj.BorderWidth / 2);
                                     Wrapper.Size = new Size(obj.Width - obj.BorderWidth, obj.Height - obj.BorderWidth);
                                     Wrapper.BorderStyle = BorderStyle.None;
                                     Wrapper.Controls.Add(new SometimesHint(listSometimesHintsSuggestions, obj, obj.BorderWidth));
@@ -316,15 +318,20 @@ namespace GSTHD
                             var obj = JsonConvert.DeserializeObject<ObjectPointGoMode>(element.ToString());
                             if (obj.Visible)
                             {
-                                var gomode = new GoMode(obj);
-                                Controls.Add(gomode);
-                                gomode.SetLocation();
+                                goMode = new GoMode(obj);
                             }
                         }
                         break;
                 }
             }
+            // Go Mode must be added last
+            if (goMode != null)
+            {
+                Controls.Add(goMode);
+                goMode.SetLocation();
+            }
         }
+
     }
 
     public class GenericLabel
@@ -431,7 +438,7 @@ namespace GSTHD
         public int Width { get; set; }
         public int Height { get; set; }
         public Color BorderColor { get; set; }
-        public int BorderWidth{ get; set; }
+        public int BorderWidth { get; set; }
     }
 
     public class ObjectPanelWotH
@@ -539,10 +546,10 @@ namespace GSTHD
     {
         public int Width { get; set; }
         public int Height { get; set; }
-        public Color? BackgroundColor { get;set; }
+        public Color? BackgroundColor { get; set; }
         public string[] DefaultSongMarkerImages { get; set; } = null;
         public string[] DefaultGossipStoneImages { get; set; } = null;
-        public string[] DefaultPathGoalImages { get; set; } = null; 
+        public string[] DefaultPathGoalImages { get; set; } = null;
         public int? DefaultWothGossipStoneCount { get; set; } = null;
         public int? DefaultPathGoalCount { get; set; } = null;
         public string[] WothColors { get; set; }
