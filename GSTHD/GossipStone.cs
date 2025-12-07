@@ -23,13 +23,14 @@ namespace GSTHD
         private string HeldImageName;
         private int ImageIndex = 0;
         private bool RemoveImage;
+        private bool Reversable;
 
         Size GossipStoneSize;
 
-        public GossipStone(ObjectPoint data, Settings settings)
-            : this(settings, data.Name, data.X, data.Y, data.ImageCollection, data.Size) { }
+        public GossipStone(ObjectPoint data, Settings settings, bool reversable)
+            : this(settings, data.Name, data.X, data.Y, data.ImageCollection, data.Size, reversable) { }
 
-        public GossipStone(Settings settings, string name, int x, int y, string[] imageCollection, Size imageSize)
+        public GossipStone(Settings settings, string name, int x, int y, string[] imageCollection, Size imageSize, bool reversable)
         {
             Settings = settings;
 
@@ -62,6 +63,8 @@ namespace GSTHD
             this.MouseMove += Mouse_Move;
             this.DragEnter += Mouse_DragEnter;
             this.DragDrop += Mouse_DragDrop;
+
+            this.Reversable = reversable;
         }
 
         private void Mouse_DragEnter(object sender, DragEventArgs e)
@@ -129,14 +132,28 @@ namespace GSTHD
         public void IncrementState()
         {
             RemoveImage = true;
-            if (ImageIndex < ImageNames.Length - 1) ImageIndex += 1;
+            if (ImageIndex < ImageNames.Length - 1)
+            {
+                ImageIndex += 1;
+            }
+            else if (this.Reversable == true)
+            {
+                ImageIndex = 0;
+            }
             UpdateImage();
         }
 
         public void DecrementState()
         {
             RemoveImage = true;
-            if (ImageIndex > 0) ImageIndex -= 1;
+            if (ImageIndex > 0)
+            {
+                ImageIndex -= 1;
+            }
+            else if (this.Reversable == true)
+            {
+                ImageIndex = ImageNames.Length - 1;
+            }
             UpdateImage();
         }
 

@@ -59,7 +59,7 @@ namespace GSTHD
             {
                 for (int i = 0; i < gossipStoneCount; i++)
                 {
-                    GossipStone newGossipStone = new GossipStone(Settings, Name + "_GossipStone" + i, 0, 0, wothItemImageList, gossipStoneSize);
+                    GossipStone newGossipStone = new GossipStone(Settings, Name + "_GossipStone" + i, 0, 0, wothItemImageList, gossipStoneSize, false);
                     newGossipStone.Location =
                         new Point(gossipStoneStartX + (newGossipStone.Width + gossipStoneSpacing) * i, LabelPlace.Location.Y);
                     listGossipStone.Add(newGossipStone);
@@ -70,7 +70,7 @@ namespace GSTHD
             {
                 for (int i = 0; i < pathGoalCount; i++)
                 {
-                    GossipStone newGossipStone = new GossipStone(Settings, Name + "_GoalGossipStone" + i, 0, 0, pathGoalImageList, gossipStoneSize);
+                    GossipStone newGossipStone = new GossipStone(Settings, Name + "_GoalGossipStone" + i, 0, 0, pathGoalImageList, gossipStoneSize, true);
                     newGossipStone.Location =
                         new Point((newGossipStone.Width + pathGoalSpacing) * i, LabelPlace.Location.Y);
                     listGossipStone.Add(newGossipStone);

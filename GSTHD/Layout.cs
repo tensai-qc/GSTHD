@@ -210,7 +210,7 @@ namespace GSTHD
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPoint>(element.ToString());
                             if (obj.Visible)
-                                Controls.Add(new GossipStone(obj, activeSettings));
+                                Controls.Add(new GossipStone(obj, activeSettings, false));
                         }
                         break;
 
@@ -235,7 +235,7 @@ namespace GSTHD
                                             TinyImageCollection = obj.TinyImageCollection,
                                             Visible = obj.Visible,
                                         };
-                                        Controls.Add(new GossipStone(gs, activeSettings));
+                                        Controls.Add(new GossipStone(gs, activeSettings, false));
                                     }
                                 }
                             }
