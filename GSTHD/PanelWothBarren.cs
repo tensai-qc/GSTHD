@@ -127,6 +127,7 @@ namespace GSTHD
                 data.TextBoxText
             );
             textBoxCustom.TextBoxField.KeyDown += textBoxCustom_KeyDown_WotH;
+            textBoxCustom.TextBoxField.KeyUp += textBoxCustom_KeyUp_WotH;
             textBoxCustom.TextBoxField.MouseClick += textBoxCustom_MouseClick;
             this.Controls.Add(textBoxCustom.TextBoxField);
         }
@@ -246,6 +247,35 @@ namespace GSTHD
                     }
                 }
                 textbox.Text = string.Empty;
+            }
+        }
+
+        private void textBoxCustom_KeyUp_WotH(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+
+                var textbox = (TextBox)sender;
+                if (ListWotH.Count == NbMaxRows)
+                {
+                    Control currentControl = (Control)sender;
+                    Control parentControl = currentControl.Parent;
+                    Form parentForm = currentControl.FindForm();
+                    Control parentFormControl = parentForm.Controls[0];
+
+                    var tabOrderControls = parentFormControl.Controls.Cast<Control>()
+                            .Where(c => c.GetType().Name == "PanelWothBarren")
+                            .OrderBy(c => c.TabIndex)
+                            .ToList();
+
+                    int currentIndex = tabOrderControls.IndexOf(parentControl);
+                    if (currentIndex < tabOrderControls.Count - 1)
+                    {
+                        tabOrderControls[currentIndex + 1].Controls[0].Focus();
+                    }
+                }
             }
         }
 

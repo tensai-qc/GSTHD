@@ -114,7 +114,6 @@ namespace GSTHD
                 {
                     SuggestionContainer.Focus();
                     SuggestionContainer.SelectedIndex = 0;
-                    SuggestionContainerIsFocus = true;
                 }
             }
             else if(e.KeyCode == Keys.Tab)
