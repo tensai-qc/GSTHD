@@ -42,7 +42,7 @@ namespace GSTHD
             this.GossipStoneSpacing = data.GossipStoneSpacing;
             this.PathGoalSpacing = data.PathGoalSpacing;
             this.TabStop = false;
-            if(data.IsScrollable)
+            if (data.IsScrollable)
                 this.MouseWheel += Panel_MouseWheel;
         }
 
@@ -187,7 +187,7 @@ namespace GSTHD
                     if (find.Count() <= 0)
                     {
                         Barren newBarren = null;
-                        if(ListBarren.Count <= 0)
+                        if (ListBarren.Count <= 0)
                             newBarren = new Barren(Settings, selectedPlace, new Point(0, -LabelSettings.Height), LabelSettings);
                         else
                         {
@@ -219,12 +219,12 @@ namespace GSTHD
                         var selectedPlace = textbox.Text.ToUpper().Trim();
 
                         // add woth if duplicates are allowed or if there aren't any duplicates
-                        if(Settings.EnableDuplicateWoth || !ListWotH.Any(x => x.Name == selectedPlace))
+                        if (Settings.EnableDuplicateWoth || !ListWotH.Any(x => x.Name == selectedPlace))
                         {
                             WotH newWotH = null;
                             if (ListWotH.Count <= 0)
                                 newWotH = new WotH(Settings, selectedPlace,
-                                    GossipStoneCount, ListImage_WothItemsOption, GossipStoneSpacing, 
+                                    GossipStoneCount, ListImage_WothItemsOption, GossipStoneSpacing,
                                     PathGoalCount, ListImage_GoalsOption, PathGoalSpacing,
                                     new Point(2, -LabelSettings.Height), LabelSettings, GossipStoneSize, WothColors);
                             else
@@ -269,14 +269,21 @@ namespace GSTHD
                     Control parentFormControl = parentForm.Controls[0];
 
                     var tabOrderControls = parentFormControl.Controls.Cast<Control>()
-                            .Where(c => c.GetType().Name == "PanelWothBarren")
-                            .OrderBy(c => c.TabIndex)
-                            .ToList();
+                        .Where(c => c.GetType().Name == "SometimesHint" || c.Name == "SometimesHintWrapper" || c.GetType().Name == "PanelWothBarren")
+                        .OrderBy(c => c.TabIndex)
+                        .ToList();
 
                     int currentIndex = tabOrderControls.IndexOf(parentControl);
                     if (currentIndex < tabOrderControls.Count - 1)
                     {
-                        tabOrderControls[currentIndex + 1].Controls[0].Focus();
+                        if (tabOrderControls[currentIndex + 1].Name == "SometimesHintWrapper")
+                        {
+                            tabOrderControls[currentIndex + 1].Controls[0].Controls[0].Focus();
+                        }
+                        else
+                        {
+                            tabOrderControls[currentIndex + 1].Controls[0].Focus();
+                        }
                     }
                 }
             }

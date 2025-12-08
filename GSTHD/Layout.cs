@@ -267,6 +267,7 @@ namespace GSTHD
                                         BorderStyle = BorderStyle.None
                                     };
                                     WrapperWrapper.Controls.Add(Wrapper);
+                                    WrapperWrapper.Name = "SometimesHintWrapper";
 
                                     Controls.Add(WrapperWrapper);
                                 }
