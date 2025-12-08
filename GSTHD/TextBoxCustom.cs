@@ -50,13 +50,21 @@ namespace GSTHD
                 Sorted = true
             };
             SuggestionContainer.Items.AddRange(listSuggestion.Keys.ToArray());
+            SuggestionContainer.KeyDown += SuggestionContainer_KeyDown;
             SuggestionContainer.KeyUp += SuggestionContainer_KeyUp;
+            SuggestionContainer.LostFocus += SuggestionContainer_LostFocus;
+            SuggestionContainer.MouseEnter += SuggestionContainer_MouseEnter;
+            SuggestionContainer.MouseLeave += SuggestionContainer_MouseLeave;
+        }
+
+        private void SuggestionContainer_LostFocus(object sender, EventArgs e)
+        {
+            SuggestionContainer.Hide();
         }
 
         private void TextBoxField_LostFocus(object sender, EventArgs e)
         {
-            //Weird but works ¯\_(ツ)_/¯
-            if (SuggestionContainerIsFocus) SuggestionContainer.Hide();
+            if (!SuggestionContainerIsFocus) SuggestionContainer.Hide();
         }
 
         private void TextBoxField_KeyDown(object sender, KeyEventArgs e)
@@ -94,11 +102,30 @@ namespace GSTHD
                 if(!SuggestionContainer.Items.Contains(textbox.Text) && SuggestionContainer.Items.Count > 0)
                     textbox.Text = SuggestionContainer.Items[0].ToString();
             }
+
+            if (e.KeyCode == Keys.Down)
+            {
+                SuggestionContainerIsFocus = true;
+            }
+        }
+        private void SuggestionContainer_MouseEnter(object sender, EventArgs e)
+        {
+            SuggestionContainerIsFocus = true;
+        }
+
+        private void SuggestionContainer_MouseLeave(object sender, EventArgs e)
+        {
+            SuggestionContainerIsFocus = false;
+        }
+
+        private void SuggestionContainer_KeyDown(object sender, KeyEventArgs e)
+        {
+            SuggestionContainerIsFocus = true;
         }
 
         private void SuggestionContainer_KeyUp(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 TextBoxField.Text = SuggestionContainer.SelectedItem.ToString();
                 TextBoxField.Focus();
