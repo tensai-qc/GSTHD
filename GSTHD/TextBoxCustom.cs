@@ -15,6 +15,7 @@ namespace GSTHD
         public ListBox SuggestionContainer;
         Dictionary<string, string> ListSuggestion;
         bool SuggestionContainerIsFocus = false;
+        bool SuggestionContainerIsDisabled = false;
 
         public TextBoxCustom(Dictionary<string, string> listSuggestion, Point location, Color color, Font font, string name, Size size, string text)
         {
@@ -116,11 +117,11 @@ namespace GSTHD
                     SuggestionContainer.SelectedIndex = 0;
                 }
             }
-            else if(e.KeyCode == Keys.Tab)
+            else if (e.KeyCode == Keys.Tab)
             {
                 //Do Nothing
             }
-            else 
+            else
             {
                 var textbox = (TextBox)sender;
                 SuggestionContainer.Items.Clear();
@@ -134,8 +135,14 @@ namespace GSTHD
                     if (!SuggestionContainer.Items.Contains(element))
                         SuggestionContainer.Items.Add(element);
                 }
-                if (TextBoxField.Text.Length > 0 && SuggestionContainer.Items.Count > 0) SuggestionContainer.Show();
-                else SuggestionContainer.Hide();
+                if (TextBoxField.Text.Length > 0 && SuggestionContainer.Items.Count > 0 && !this.SuggestionContainerIsDisabled)
+                {
+                    SuggestionContainer.Show();
+                }
+                else
+                {
+                    SuggestionContainer.Hide();
+                }
             }
         }
 
@@ -148,7 +155,12 @@ namespace GSTHD
             );
         }
 
-        public void newLocation(Point newLocation, Point panelLocation)
+        public void SetSuggestionsContainerDisabled(bool disabled)
+        {
+            this.SuggestionContainerIsDisabled = disabled;
+        }
+
+    public void newLocation(Point newLocation, Point panelLocation)
         {
             TextBoxField.Location = newLocation;
             SetSuggestionsContainerLocation(panelLocation);

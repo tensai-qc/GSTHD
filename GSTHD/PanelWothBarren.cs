@@ -260,6 +260,7 @@ namespace GSTHD
                 var textbox = (TextBox)sender;
                 if (ListWotH.Count == NbMaxRows)
                 {
+                    textBoxCustom.SetSuggestionsContainerDisabled(true);
                     Control currentControl = (Control)sender;
                     Control parentControl = currentControl.Parent;
                     Form parentForm = currentControl.FindForm();
@@ -286,6 +287,7 @@ namespace GSTHD
                 var label = (Label)sender;
                 var barren = this.ListBarren.Where(x => x.LabelPlace.Name == label.Name).ToList()[0];
                 this.RemoveBarren(barren);
+                textBoxCustom.SetSuggestionsContainerDisabled(false);
             }
         }
 
@@ -296,6 +298,7 @@ namespace GSTHD
                 var label = (Label)sender;
                 var woth = this.ListWotH.Where(x => x.LabelPlace.Name == label.Name).ToList()[0];
                 this.RemoveWotH(woth);
+                textBoxCustom.SetSuggestionsContainerDisabled(false);
             }
         }
 
