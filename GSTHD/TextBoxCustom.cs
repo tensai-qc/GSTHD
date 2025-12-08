@@ -13,9 +13,10 @@ namespace GSTHD
     {
         public TextBox TextBoxField;
         public ListBox SuggestionContainer;
-        Dictionary<string, string> ListSuggestion;
+        readonly Dictionary<string, string> ListSuggestion;
         bool SuggestionContainerIsFocus = false;
         bool SuggestionContainerIsDisabled = false;
+        Action<object, KeyEventArgs> KeyDownAction = null;
 
         public TextBoxCustom(Dictionary<string, string> listSuggestion, Point location, Color color, Font font, string name, Size size, string text)
         {
@@ -55,6 +56,11 @@ namespace GSTHD
             SuggestionContainer.LostFocus += SuggestionContainer_LostFocus;
             SuggestionContainer.MouseEnter += SuggestionContainer_MouseEnter;
             SuggestionContainer.MouseLeave += SuggestionContainer_MouseLeave;
+        }
+
+        public void SetKeyDownAction(Action<object, KeyEventArgs> action)
+        {
+            KeyDownAction = action;
         }
 
         private void SuggestionContainer_LostFocus(object sender, EventArgs e)
@@ -131,6 +137,7 @@ namespace GSTHD
                 TextBoxField.Focus();
                 SuggestionContainer.Hide();
                 SuggestionContainerIsFocus = false;
+                KeyDownAction?.Invoke(TextBoxField, e);
             }
         }
 
@@ -187,7 +194,7 @@ namespace GSTHD
             this.SuggestionContainerIsDisabled = disabled;
         }
 
-    public void newLocation(Point newLocation, Point panelLocation)
+    public void NewLocation(Point newLocation, Point panelLocation)
         {
             TextBoxField.Location = newLocation;
             SetSuggestionsContainerLocation(panelLocation);
