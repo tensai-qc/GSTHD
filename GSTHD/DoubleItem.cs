@@ -7,7 +7,7 @@ namespace GSTHD
 {
     class DoubleItem : PictureBox
     {
-        List<string> ListImageName;
+        readonly List<string> ListImageName;
         bool isMouseDown = false;
         bool isColoredLeft = false;
         bool isColoredRight = false;

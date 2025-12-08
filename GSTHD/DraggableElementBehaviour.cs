@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace GSTHD
 {
-    public interface DraggableElement<T>
+    public interface IDraggableElement<T>
     {
         T GetState();
         void SetState(T state);
@@ -15,7 +15,7 @@ namespace GSTHD
 
     public class DraggableElementBehaviour<T>
     {
-        protected DraggableElement<T> Element;
+        protected IDraggableElement<T> Element;
         protected Settings Settings;
 
         protected bool LeftClickDown = false;
@@ -27,7 +27,7 @@ namespace GSTHD
 
         protected T LastState;
 
-        public DraggableElementBehaviour(DraggableElement<T> element, Settings settings)
+        public DraggableElementBehaviour(IDraggableElement<T> element, Settings settings)
         {
             Element = element;
             Settings = settings;

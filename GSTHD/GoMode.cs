@@ -11,10 +11,10 @@ namespace GSTHD
 {
     class GoMode : PictureBox
     {
-        List<string> ListImageName;
-        private new string BackgroundImage;        
+        readonly List<string> ListImageName;
+        private new readonly string BackgroundImage;        
         Point FirstLocation;
-        Timer tictac;
+        readonly Timer tictac;
         int imageIndex = 0;
 
         public PictureBox GoModeImage = new PictureBox();
@@ -22,8 +22,10 @@ namespace GSTHD
 
         public GoMode(ObjectPointGoMode data)
         {
-            tictac = new Timer();
-            tictac.Interval = 95;
+            tictac = new Timer
+            {
+                Interval = 95
+            };
             tictac.Tick += Tictac_Tick;
             tictac.Start();
 
@@ -65,38 +67,6 @@ namespace GSTHD
                 this.Image = flipImage;
             }
 
-        }
-
-        //Copy/Paste from the web, need to test and adjust
-        // https://stackoverflow.com/questions/2163829/how-do-i-rotate-a-picture-in-winforms
-        private Image RotateImage(Image img, float rotationAngle)
-        {
-            //create an empty Bitmap image
-            Bitmap bmp = new Bitmap(img.Width, img.Height);
-
-            //turn the Bitmap into a Graphics object
-            Graphics gfx = Graphics.FromImage(bmp);
-
-            //now we set the rotation point to the center of our image
-            gfx.TranslateTransform((float)bmp.Width / 2, (float)bmp.Height / 2);
-
-            //now rotate the image
-            gfx.RotateTransform(rotationAngle);
-
-            gfx.TranslateTransform(-(float)bmp.Width / 2, -(float)bmp.Height / 2);
-
-            //set the InterpolationMode to HighQualityBicubic so to ensure a high
-            //quality image once it is transformed to the specified size
-            gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
-
-            //now draw our new image onto the graphics object
-            gfx.DrawImage(img, new Point(0, 0));
-
-            //dispose of our Graphics object
-            gfx.Dispose();
-
-            //return the image
-            return bmp;
         }
 
         private void Click_MouseDown(object sender, MouseEventArgs e)

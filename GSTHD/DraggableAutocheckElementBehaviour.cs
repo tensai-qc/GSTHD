@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace GSTHD
 {
-    public interface DraggableAutocheckElement<T> : DraggableElement<T>
+    public interface IDraggableAutocheckElement<T> : IDraggableElement<T>
     {
         void IncrementState();
         void DecrementState();
@@ -12,11 +12,11 @@ namespace GSTHD
 
     public class DraggableAutocheckElementBehaviour<T> : DraggableElementBehaviour<T>
     {
-        protected new DraggableAutocheckElement<T> Element;
+        protected new IDraggableAutocheckElement<T> Element;
 
         public bool AutocheckDragDrop = false;
 
-        public DraggableAutocheckElementBehaviour(DraggableAutocheckElement<T> element, Settings settings)
+        public DraggableAutocheckElementBehaviour(IDraggableAutocheckElement<T> element, Settings settings)
             : base(element, settings)
         {
             Element = element;

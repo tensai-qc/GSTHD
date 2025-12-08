@@ -12,21 +12,21 @@ using System.Windows.Forms;
 
 namespace GSTHD
 {
-    public interface UpdatableFromSettings
+    public interface IUpdatableFromSettings
     {
         void UpdateFromSettings();
     }
 
     public class Layout : Panel
     {
-        public List<UpdatableFromSettings> ListUpdatables;
+        public List<IUpdatableFromSettings> ListUpdatables;
         public string FilePath;
         public JObject Json;
         public LayoutSettings Settings;
 
         public Layout(string filePath)
         {
-            ListUpdatables = new List<UpdatableFromSettings>();
+            ListUpdatables = new List<IUpdatableFromSettings>();
             FilePath = filePath;
             try
             {
@@ -75,7 +75,7 @@ namespace GSTHD
             Size = new Size(Math.Max(144, Settings.Width), Math.Max(80, Settings.Height));
         }
 
-        public void LoadContents(Settings activeSettings, SortedSet<string> listSometimesHintsSuggestions, Dictionary<string, string> listPlacesWithTag, MainForm form)
+        public void LoadContents(Settings activeSettings, SortedSet<string> listSometimesHintsSuggestions, Dictionary<string, string> listPlacesWithTag)
         {
             activeSettings.SetLayoutSettings(Settings);
 
@@ -250,18 +250,22 @@ namespace GSTHD
                             {
                                 if (obj.BorderWidth > 0)
                                 {
-                                    Panel Wrapper = new Panel();
-                                    Wrapper.BackColor = obj.BackColor;
-                                    Wrapper.Location = new Point(obj.BorderWidth / 2, obj.BorderWidth / 2);
-                                    Wrapper.Size = new Size(obj.Width - obj.BorderWidth, obj.Height - obj.BorderWidth);
-                                    Wrapper.BorderStyle = BorderStyle.None;
+                                    Panel Wrapper = new Panel
+                                    {
+                                        BackColor = obj.BackColor,
+                                        Location = new Point(obj.BorderWidth / 2, obj.BorderWidth / 2),
+                                        Size = new Size(obj.Width - obj.BorderWidth, obj.Height - obj.BorderWidth),
+                                        BorderStyle = BorderStyle.None
+                                    };
                                     Wrapper.Controls.Add(new SometimesHint(listSometimesHintsSuggestions, obj, obj.BorderWidth));
 
-                                    Panel WrapperWrapper = new Panel();
-                                    WrapperWrapper.Size = new Size(obj.Width, obj.Height);
-                                    WrapperWrapper.Location = new Point(obj.X, obj.Y);
-                                    WrapperWrapper.BackColor = obj.BorderColor.IsEmpty ? Color.GhostWhite : obj.BorderColor;
-                                    WrapperWrapper.BorderStyle = BorderStyle.None;
+                                    Panel WrapperWrapper = new Panel
+                                    {
+                                        Size = new Size(obj.Width, obj.Height),
+                                        Location = new Point(obj.X, obj.Y),
+                                        BackColor = obj.BorderColor.IsEmpty ? Color.GhostWhite : obj.BorderColor,
+                                        BorderStyle = BorderStyle.None
+                                    };
                                     WrapperWrapper.Controls.Add(Wrapper);
 
                                     Controls.Add(WrapperWrapper);
@@ -566,7 +570,7 @@ namespace GSTHD
             return $"Provided file \"{filePath}\" is not a valid layout file";
         }
 
-        private static string GenericMessagePrefix = $"Provided file is not a valid layout file";
+        private static readonly string GenericMessagePrefix = $"Provided file is not a valid layout file";
 
         public InvalidLayoutFileException(string fileName, string message)
             : base(Config.LayoutFileExceptionTitle, $"{GetMessagePrefix(fileName)}: {message}.") { }

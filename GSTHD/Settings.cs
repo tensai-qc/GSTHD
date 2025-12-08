@@ -33,7 +33,7 @@ namespace GSTHD
             LeftAndRight,
         }
 
-        private LocalSettings Local;
+        private readonly LocalSettings Local;
         private LayoutSettings Layout;
 
         public bool ShowMenuBar { get => Local.ShowMenuBar; }

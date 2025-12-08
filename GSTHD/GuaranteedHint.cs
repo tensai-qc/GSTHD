@@ -7,7 +7,7 @@ namespace GSTHD
 {
     class GuaranteedHint : PictureBox
     {
-        List<string> ListImageName = new List<string>();
+        readonly List<string> ListImageName = new List<string>();
 
         Size GuaranteddHintSize;
 

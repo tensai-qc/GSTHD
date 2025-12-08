@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace GSTHD
 {
-    public interface ProgressibleElement<T>
+    public interface IProgressibleElement<T>
     {
         void IncrementState();
         void DecrementState();
@@ -13,10 +13,10 @@ namespace GSTHD
 
     public class ProgressibleElementBehaviour<T>
     {
-        protected ProgressibleElement<T> Element;
+        protected IProgressibleElement<T> Element;
         protected Settings Settings;
 
-        public ProgressibleElementBehaviour(ProgressibleElement<T> element, Settings settings)
+        public ProgressibleElementBehaviour(IProgressibleElement<T> element, Settings settings)
         {
             Element = element;
             Settings = settings;

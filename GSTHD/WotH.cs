@@ -16,7 +16,7 @@ namespace GSTHD
         public List<GossipStone> listGossipStone = new List<GossipStone>();
         public string Name;
 
-        private Color[] Colors;
+        private readonly Color[] Colors;
         private int ColorIndex;
         private int MinIndex;
 

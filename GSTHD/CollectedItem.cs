@@ -8,18 +8,18 @@ using System.Windows.Forms;
 
 namespace GSTHD
 {
-    class CollectedItem : PictureBox, ProgressibleElement<int>, DraggableAutocheckElement<int>
+    class CollectedItem : PictureBox, IProgressibleElement<int>, IDraggableAutocheckElement<int>
     {
         private readonly Settings Settings;
         private readonly ProgressibleElementBehaviour<int> ProgressBehaviour;
         private readonly DraggableAutocheckElementBehaviour<int> DragBehaviour;
 
-        private string[] ImageNames;
+        private readonly string[] ImageNames;
         private int ImageIndex = 0;
-        private Label ItemCount;
+        private readonly Label ItemCount;
         private Size CollectedItemSize;
         private Size CollectedItemCountPosition;
-        private bool HideMin = false;
+        private readonly bool HideMin = false;
         private readonly int CollectedItemMin;
         private readonly int CollectedItemMax;
         private readonly int CollectedItemDefault;
@@ -27,8 +27,8 @@ namespace GSTHD
         private readonly int Step;
         private int StepIndex = 0;
         private readonly int[] Steps;
-        private Color LabelColor;
-        private Color CountMaxLabelColor;
+        private readonly Color LabelColor;
+        private readonly Color CountMaxLabelColor;
 
         public CollectedItem(ObjectPointCollectedItem data, Settings settings)
         {
@@ -41,7 +41,7 @@ namespace GSTHD
 
             Steps = data.Steps;
             CollectedItemMin = Steps != null ? Steps[0] : data.CountMin;
-            CollectedItemMax = Steps != null ? Steps[Steps.Length - 1] : data.CountMax.HasValue ? data.CountMax.Value : 100;
+            CollectedItemMax = Steps != null ? Steps[Steps.Length - 1] : data.CountMax ?? 100;
             CollectedItemDefault = Steps != null ? Steps[0] : data.DefaultValue;
             Step = data.Step == 0 ? 1 : data.Step;
             CollectedItems = Steps != null ? Steps[0] : System.Math.Min(System.Math.Max(CollectedItemMin, CollectedItemDefault), CollectedItemMax);

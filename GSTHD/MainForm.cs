@@ -15,9 +15,9 @@ namespace GSTHD
 {
     public partial class MainForm : Form
     {
-        Dictionary<string, string> ListPlacesWithTag = new Dictionary<string, string>();
-        SortedSet<string> ListPlaces = new SortedSet<string>();
-        SortedSet<string> ListSometimesHintsSuggestions = new SortedSet<string>();
+        readonly Dictionary<string, string> ListPlacesWithTag = new Dictionary<string, string>();
+        readonly SortedSet<string> ListPlaces = new SortedSet<string>();
+        readonly SortedSet<string> ListSometimesHintsSuggestions = new SortedSet<string>();
 
         MainForm_MenuBar MenuBar;
         LocalSettings LocalSettings;
@@ -71,8 +71,10 @@ namespace GSTHD
 
         private void LoadMenuBar()
         {
-            MenuBar = new MainForm_MenuBar(this, LocalSettings);
-            MenuBar.Dock = DockStyle.Top;
+            MenuBar = new MainForm_MenuBar(this, LocalSettings)
+            {
+                Dock = DockStyle.Top
+            };
             MenuBar.SetRenderer();
         }
 
@@ -195,7 +197,7 @@ namespace GSTHD
             var path = FixLayoutPath(layoutPath);
 
             var layout = new Layout(path);
-            layout.LoadContents(ActiveSettings, ListSometimesHintsSuggestions, ListPlacesWithTag, this);
+            layout.LoadContents(ActiveSettings, ListSometimesHintsSuggestions, ListPlacesWithTag);
             return layout;
         }
 
@@ -227,7 +229,6 @@ namespace GSTHD
             SetSize();
             SetBackColor();
 
-            MenuBar.SetActiveLayout(ActiveLayout);
             ActiveSettings.SetLayoutSettings(ActiveLayout.Settings);
 
             Controls.Add(ActiveLayout);
@@ -251,7 +252,7 @@ namespace GSTHD
         //    //label_collectedSkulls_MouseDown(pbox_collectedSkulls.Controls[0], new MouseEventArgs(MouseButtons.Right, 1, 0, 0, 0));
         //}
 
-        public void Reset(object sender)
+        public void Reset()
         {
             ActiveLayout.BackgroundImage = null;
             ControlExtensions.ClearAndDispose(ActiveLayout);
@@ -281,7 +282,7 @@ namespace GSTHD
             return sb.ToString();
         }
 
-        private static string GenericMessage = $"File(s) not found.";
+        private static readonly string GenericMessage = $"File(s) not found.";
 
         public FilesNotFoundException(params string[] fileNames)
             : base(Config.LayoutFileExceptionTitle, GetMessage(fileNames)) { }

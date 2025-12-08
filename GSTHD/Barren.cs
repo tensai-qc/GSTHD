@@ -15,7 +15,7 @@ namespace GSTHD
         public Label LabelPlace;
         public string Name;
 
-        private Color[] Colors;
+        private readonly Color[] Colors;
         private int ColorIndex;
 
         public Barren(Settings settings, string selectedPlace, Point lastLabelLocation, Label labelSettings)

@@ -19,7 +19,7 @@ namespace GSTHD
             this.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             this.AutoCompleteSource = AutoCompleteSource.CustomSource;
 
-            this.KeyDown += textBox_KeyDown;
+            this.KeyDown += TextBox_KeyDown;
             this.AutoCompleteCustomSource.AddRange(listSometimesHints.ToArray());
             if (borderWidth > 0)
             {
@@ -34,7 +34,7 @@ namespace GSTHD
             }
         }
 
-        private void textBox_KeyDown(object sender, KeyEventArgs e)
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {

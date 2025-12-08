@@ -5,13 +5,13 @@ using System.Windows.Forms;
 
 namespace GSTHD
 {
-    public class Item : PictureBox, ProgressibleElement<int>, DraggableAutocheckElement<int>
+    public class Item : PictureBox, IProgressibleElement<int>, IDraggableAutocheckElement<int>
     {
         private readonly Settings Settings;
         private readonly ProgressibleElementBehaviour<int> ProgressBehaviour;
         private readonly DraggableAutocheckElementBehaviour<int> DragBehaviour;
 
-        private string[] ImageNames;
+        private readonly string[] ImageNames;
         private int ImageIndex = 0;
 
         public Item(ObjectPoint data, Settings settings)

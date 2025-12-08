@@ -13,13 +13,15 @@ namespace GSTHD
     {
         public Label ChronoLabel;
         bool ChronoRunning = false;
-        Timer ChronoTimer;
+        readonly Timer ChronoTimer;
 
         public Chronometer(AutoFillTextBox data)
         {
-            this.ChronoTimer = new Timer();
-            this.ChronoTimer.Interval = 10;
-            this.ChronoTimer.Tick += new EventHandler(this.timer_Tick);
+            this.ChronoTimer = new Timer
+            {
+                Interval = 10
+            };
+            this.ChronoTimer.Tick += new EventHandler(this.Timer_Tick);
             this.ChronoTimer.Start();
 
             ChronoLabel = new Label
@@ -61,7 +63,7 @@ namespace GSTHD
             }
         }
 
-        private void timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             TimeSpan time = this.Elapsed;
             ChronoLabel.Text = time.ToString(@"hh\:mm\:ss\.ff");
