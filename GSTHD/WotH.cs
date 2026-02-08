@@ -24,7 +24,7 @@ namespace GSTHD
             string selectedPlace,
             int gossipStoneCount, string[] wothItemImageList, int gossipStoneSpacing,
             int pathGoalCount, string[] pathGoalImageList, int pathGoalSpacing,
-            Point lastLabelLocation, Label labelSettings, Size gossipStoneSize, string[] wothColors)
+            Point lastLabelLocation, Label labelSettings, Size gossipStoneSize, string[] wothColors, Color goalBackColor)
         {
             Settings = settings;
             Name = selectedPlace;
@@ -59,7 +59,7 @@ namespace GSTHD
             {
                 for (int i = 0; i < gossipStoneCount; i++)
                 {
-                    GossipStone newGossipStone = new GossipStone(Settings, Name + "_GossipStone" + i, 0, 0, wothItemImageList, gossipStoneSize, false);
+                    GossipStone newGossipStone = new GossipStone(Settings, Name + "_GossipStone" + i, 0, 0, wothItemImageList, gossipStoneSize, false, goalBackColor);
                     newGossipStone.Location =
                         new Point(gossipStoneStartX + (newGossipStone.Width + gossipStoneSpacing) * i, LabelPlace.Location.Y);
                     listGossipStone.Add(newGossipStone);
@@ -70,7 +70,7 @@ namespace GSTHD
             {
                 for (int i = 0; i < pathGoalCount; i++)
                 {
-                    GossipStone newGossipStone = new GossipStone(Settings, Name + "_GoalGossipStone" + i, 0, 0, pathGoalImageList, gossipStoneSize, true);
+                    GossipStone newGossipStone = new GossipStone(Settings, Name + "_GoalGossipStone" + i, 0, 0, pathGoalImageList, gossipStoneSize, true, goalBackColor);
                     newGossipStone.Location =
                         new Point((newGossipStone.Width + pathGoalSpacing) * i, LabelPlace.Location.Y);
                     listGossipStone.Add(newGossipStone);

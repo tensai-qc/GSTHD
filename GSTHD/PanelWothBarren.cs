@@ -26,6 +26,7 @@ namespace GSTHD
         readonly int PathGoalSpacing;
         int NbMaxRows;
         Label LabelSettings = new Label();
+        private readonly Color GoalBackColor;
 
         public PanelWothBarren(ObjectPanelWotH data, Settings settings)
         {
@@ -44,6 +45,7 @@ namespace GSTHD
             this.TabStop = false;
             if (data.IsScrollable)
                 this.MouseWheel += Panel_MouseWheel;
+            this.GoalBackColor = data.GoalBackColor;
         }
 
         public PanelWothBarren(ObjectPanelBarren data, Settings settings)
@@ -226,14 +228,14 @@ namespace GSTHD
                                 newWotH = new WotH(Settings, selectedPlace,
                                     GossipStoneCount, ListImage_WothItemsOption, GossipStoneSpacing,
                                     PathGoalCount, ListImage_GoalsOption, PathGoalSpacing,
-                                    new Point(2, -LabelSettings.Height), LabelSettings, GossipStoneSize, WothColors);
+                                    new Point(2, -LabelSettings.Height), LabelSettings, GossipStoneSize, WothColors, GoalBackColor);
                             else
                             {
                                 var lastLocation = ListWotH.Last().LabelPlace.Location;
                                 newWotH = new WotH(Settings, selectedPlace,
                                     GossipStoneCount, ListImage_WothItemsOption, GossipStoneSpacing,
                                     PathGoalCount, ListImage_GoalsOption, PathGoalSpacing,
-                                    lastLocation, LabelSettings, GossipStoneSize, WothColors);
+                                    lastLocation, LabelSettings, GossipStoneSize, WothColors, GoalBackColor);
                             }
                             ListWotH.Add(newWotH);
                             this.Controls.Add(newWotH.LabelPlace);

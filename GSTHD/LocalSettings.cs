@@ -45,6 +45,7 @@ namespace GSTHD
         public bool EnableLastWoth { get; set; } = false;
         public bool EnableBarrenColors { get; set; } = true;
         public KnownColor LastWothColor { get; set; } = KnownColor.BlueViolet;
+        public Color GoalBackColor { get; set; } = Color.Transparent;
 
         public MedallionLabel DefaultDungeonNames { get; set; } = new MedallionLabel()
         {

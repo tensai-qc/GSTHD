@@ -58,7 +58,7 @@ namespace GSTHD
         public bool EnableLastWoth { get => Local.EnableLastWoth; }
         public bool EnableBarrenColors { get => Local.EnableBarrenColors; }
         public KnownColor LastWothColor { get => Local.LastWothColor; }
-
+        public Color GoalBackColor { get => Local.GoalBackColor; }
         public MedallionLabel DefaultDungeonNames { get; private set; }
 
         public Settings(LocalSettings local)

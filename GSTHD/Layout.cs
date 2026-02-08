@@ -210,7 +210,7 @@ namespace GSTHD
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPoint>(element.ToString());
                             if (obj.Visible)
-                                Controls.Add(new GossipStone(obj, activeSettings, false));
+                                Controls.Add(new GossipStone(obj, activeSettings, false, Color.Transparent));
                         }
                         break;
 
@@ -235,7 +235,7 @@ namespace GSTHD
                                             TinyImageCollection = obj.TinyImageCollection,
                                             Visible = obj.Visible,
                                         };
-                                        Controls.Add(new GossipStone(gs, activeSettings, false));
+                                        Controls.Add(new GossipStone(gs, activeSettings, false, Color.Transparent));
                                     }
                                 }
                             }
@@ -482,6 +482,7 @@ namespace GSTHD
         public string[] PathGoalImageCollection { get; set; }
         public int PathGoalSpacing { get; set; }
         public string[] WothColors { get; set; }
+        public Color GoalBackColor { get; set; }
     }
 
     public class ObjectPanelBarren
@@ -491,7 +492,7 @@ namespace GSTHD
         public int Y { get; set; }
         public bool Visible { get; set; }
         public Color BackColor { get; set; }
-        public int Width { get; set; }
+                public int Width { get; set; }
         public int Height { get; set; }
         public int NbMaxRows { get; set; }
         public bool IsScrollable { get; set; }
@@ -562,6 +563,7 @@ namespace GSTHD
         public string[] BarrenColors { get; set; }
         public int? DefaultWothColorIndex { get; set; }
         public MedallionLabel DefaultDungeonNames { get; set; } = null;
+        public Color? DefaultGoalBackColor { get; set; }
     }
 
     public class InvalidLayoutFileException : GSTHDException

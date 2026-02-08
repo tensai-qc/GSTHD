@@ -24,13 +24,14 @@ namespace GSTHD
         private int ImageIndex = 0;
         private bool RemoveImage;
         private bool Reversable;
+        private Color backColor;
 
         Size GossipStoneSize;
 
-        public GossipStone(ObjectPoint data, Settings settings, bool reversable)
-            : this(settings, data.Name, data.X, data.Y, data.ImageCollection, data.Size, reversable) { }
+        public GossipStone(ObjectPoint data, Settings settings, bool reversable, Color backColor)
+            : this(settings, data.Name, data.X, data.Y, data.ImageCollection, data.Size, reversable, backColor) { }
 
-        public GossipStone(Settings settings, string name, int x, int y, string[] imageCollection, Size imageSize, bool reversable)
+        public GossipStone(Settings settings, string name, int x, int y, string[] imageCollection, Size imageSize, bool reversable, Color backColor)
         {
             Settings = settings;
 
@@ -52,7 +53,7 @@ namespace GSTHD
             ProgressBehaviour = new ProgressibleElementBehaviour<GossipStoneState>(this, Settings);
             DragBehaviour = new DraggableElementBehaviour<GossipStoneState>(this, Settings);
 
-            this.BackColor = Color.Transparent;
+            this.BackColor = backColor;
             this.Location = new Point(x, y);
             this.TabStop = false;
             this.AllowDrop = true;
