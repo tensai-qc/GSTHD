@@ -94,6 +94,10 @@ namespace GSTHD
                     {
                         tabOrderControls[currentIndex + 1].Controls[0].Controls[0].Focus();
                     }
+                    else if (tabOrderControls[currentIndex + 1].GetType().Name == "SometimesHint")
+                    {
+                        tabOrderControls[currentIndex + 1].Focus();
+                    }
                     else
                     {
                         tabOrderControls[currentIndex + 1].Controls[0].Focus();

@@ -159,6 +159,7 @@ namespace GSTHD
                     data.TextBoxText
                 );
             textBoxCustom.TextBoxField.KeyDown += TextBoxCustom_KeyDown_Barren;
+            textBoxCustom.TextBoxField.KeyUp += TextBoxCustom_KeyUp_Barren;
             textBoxCustom.TextBoxField.MouseClick += TextBoxCustom_MouseClick;
             textBoxCustom.SetKeyDownAction(TextBoxCustom_KeyDown_Barren);
             this.Controls.Add(textBoxCustom.TextBoxField);
@@ -281,6 +282,51 @@ namespace GSTHD
                         if (tabOrderControls[currentIndex + 1].Name == "SometimesHintWrapper")
                         {
                             tabOrderControls[currentIndex + 1].Controls[0].Controls[0].Focus();
+                        }
+                        else if (tabOrderControls[currentIndex + 1].GetType().Name == "SometimesHint")
+                        {
+                            tabOrderControls[currentIndex + 1].Focus();
+                        }
+                        else
+                        {
+                            tabOrderControls[currentIndex + 1].Controls[0].Focus();
+                        }
+                    }
+                }
+            }
+        }
+
+        private void TextBoxCustom_KeyUp_Barren(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+
+                var textbox = (TextBox)sender;
+                if (ListBarren.Count == NbMaxRows)
+                {
+                    textBoxCustom.SetSuggestionsContainerDisabled(true);
+                    Control currentControl = (Control)sender;
+                    Control parentControl = currentControl.Parent;
+                    Form parentForm = currentControl.FindForm();
+                    Control parentFormControl = parentForm.Controls[0];
+
+                    var tabOrderControls = parentFormControl.Controls.Cast<Control>()
+                        .Where(c => c.GetType().Name == "SometimesHint" || c.Name == "SometimesHintWrapper" || c.GetType().Name == "PanelWothBarren")
+                        .OrderBy(c => c.TabIndex)
+                        .ToList();
+
+                    int currentIndex = tabOrderControls.IndexOf(parentControl);
+                    if (currentIndex < tabOrderControls.Count - 1)
+                    {
+                        if (tabOrderControls[currentIndex + 1].Name == "SometimesHintWrapper")
+                        {
+                            tabOrderControls[currentIndex + 1].Controls[0].Controls[0].Focus();
+                        }
+                        else if (tabOrderControls[currentIndex + 1].GetType().Name == "SometimesHint")
+                        {
+                            tabOrderControls[currentIndex + 1].Focus();
                         }
                         else
                         {
