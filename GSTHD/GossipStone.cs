@@ -24,7 +24,6 @@ namespace GSTHD
         private int ImageIndex = 0;
         private bool RemoveImage;
         private bool Reversable;
-        private Color backColor;
 
         Size GossipStoneSize;
 

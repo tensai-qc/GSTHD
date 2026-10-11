@@ -29,8 +29,18 @@ namespace GSTHD
         public MainForm()
         {
             InitializeComponent();
+
+            this.FormClosing += MainForm_FormClosing;
         }
 
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                Properties.Settings.Default.WindowLocation = this.Location;
+            }
+            Properties.Settings.Default.Save();
+        }
 
         //private void MainForm_KeyDown(object sender, KeyEventArgs e)
         //{
@@ -206,6 +216,21 @@ namespace GSTHD
             Size = new Size(ActiveLayout.Size.Width, ActiveLayout.Size.Height + MenuBar.Size.Height);
         }
 
+        private bool IsOnScreen(Point location, Size size)
+        {
+            Rectangle rect = new Rectangle(location, size);
+            return Screen.AllScreens.Any(screen => screen.WorkingArea.IntersectsWith(rect));
+        }
+
+        private void SetLocation()
+        {
+            Point savedLocation = Properties.Settings.Default.WindowLocation;
+            if (savedLocation != Point.Empty && IsOnScreen(savedLocation, this.Size))
+            {
+                this.Location = savedLocation;
+            }
+        }
+
         private void SetBackColor()
         {
             if (ActiveLayout.Settings.BackgroundColor.HasValue)
@@ -227,6 +252,7 @@ namespace GSTHD
         {
             ActiveLayout.Dock = DockStyle.Top;
             SetSize();
+            SetLocation();
             SetBackColor();
 
             ActiveSettings.SetLayoutSettings(ActiveLayout.Settings);
