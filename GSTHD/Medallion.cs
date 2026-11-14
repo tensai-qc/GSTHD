@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace GSTHD
 {
-    public class Medallion : PictureBox, IUpdatableFromSettings, IProgressibleElement<int>, IDraggableAutocheckElement<int>
+    public class Medallion : TransparentPictureBox, IUpdatableFromSettings, IProgressibleElement<int>, IDraggableAutocheckElement<int>
     {
         private readonly Settings Settings;
         private readonly ProgressibleElementBehaviour<int> ProgressBehaviour;

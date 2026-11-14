@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace GSTHD
 {
-    class CollectedItem : PictureBox, IProgressibleElement<int>, IDraggableAutocheckElement<int>
+    class CollectedItem : TransparentPictureBox, IProgressibleElement<int>, IDraggableAutocheckElement<int>
     {
         private readonly Settings Settings;
         private readonly ProgressibleElementBehaviour<int> ProgressBehaviour;

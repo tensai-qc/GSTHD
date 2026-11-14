@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace GSTHD
 {
-    public class Item : PictureBox, IProgressibleElement<int>, IDraggableAutocheckElement<int>
+    public class Item : TransparentPictureBox, IProgressibleElement<int>, IDraggableAutocheckElement<int>
     {
         private readonly Settings Settings;
         private readonly ProgressibleElementBehaviour<int> ProgressBehaviour;

@@ -24,8 +24,6 @@ namespace GSTHD
         Layout ActiveLayout;
         Settings ActiveSettings;
 
-        //PictureBox pbox_collectedSkulls;
-
         public MainForm()
         {
             InitializeComponent();

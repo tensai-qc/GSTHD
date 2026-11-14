@@ -12,7 +12,7 @@ namespace GSTHD
         public int ImageIndex;
     }
 
-    public class SongMarker : PictureBox, IUpdatableFromSettings, IProgressibleElement<SongMarkerState>, IDraggableElement<SongMarkerState>
+    public class SongMarker : TransparentPictureBox, IUpdatableFromSettings, IProgressibleElement<SongMarkerState>, IDraggableElement<SongMarkerState>
     {
         private readonly Settings Settings;
         private readonly ProgressibleElementBehaviour<SongMarkerState> ProgressBehaviour;
@@ -224,7 +224,7 @@ namespace GSTHD
         public void CancelChanges() { }
     }
 
-    public class Song : PictureBox, IUpdatableFromSettings, IProgressibleElement<int>, IDraggableAutocheckElement<int>
+    public class Song : TransparentPictureBox, IUpdatableFromSettings, IProgressibleElement<int>, IDraggableAutocheckElement<int>
     {
         private readonly Settings Settings;
         private readonly ProgressibleElementBehaviour<int> ProgressBehaviour;

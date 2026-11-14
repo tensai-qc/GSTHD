@@ -12,7 +12,7 @@ namespace GSTHD
         public int ImageIndex;
     }
 
-    public class GossipStone : PictureBox, IProgressibleElement<GossipStoneState>, IDraggableElement<GossipStoneState>
+    public class GossipStone : TransparentPictureBox, IProgressibleElement<GossipStoneState>, IDraggableElement<GossipStoneState>
     {
         private readonly Settings Settings;
         private readonly ProgressibleElementBehaviour<GossipStoneState> ProgressBehaviour;

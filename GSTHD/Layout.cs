@@ -23,9 +23,10 @@ namespace GSTHD
         public string FilePath;
         public JObject Json;
         public LayoutSettings Settings;
-
+        private GoMode goModeControl;
         public Layout(string filePath)
         {
+            DoubleBuffered = true;
             ListUpdatables = new List<IUpdatableFromSettings>();
             FilePath = filePath;
             try
@@ -38,6 +39,22 @@ namespace GSTHD
             }
             LoadSettings();
             SetSizeFromSettings();
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            base.OnPaintBackground(e);
+
+            var gm = goModeControl;
+            if (gm == null || !gm.Visible || gm.Image == null) return;
+
+            var center = gm.GoModeImage;
+            if (center.Image != null)
+            {
+                var r = new Rectangle(gm.Left + center.Left, gm.Top + center.Top,
+                                    center.Width, center.Height);
+                e.Graphics.DrawImage(center.Image, r);
+            }
         }
 
         public void UpdateFromSettings()
@@ -334,6 +351,7 @@ namespace GSTHD
             {
                 Controls.Add(goMode);
                 goMode.SetLocation();
+                goModeControl = goMode;
             }
         }
 

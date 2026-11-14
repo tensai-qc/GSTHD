@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace GSTHD
 {
-    class GuaranteedHint : PictureBox
+    class GuaranteedHint : TransparentPictureBox
     {
         readonly List<string> ListImageName = new List<string>();
 

@@ -145,6 +145,9 @@
     <Compile Include="Layout.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="TransparentPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Util\JsonIO.cs" />
     <Compile Include="Util\Math.cs" />
     <Compile Include="Medallion.cs">

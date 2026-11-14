@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace GSTHD
 {
-    class DoubleItem : PictureBox
+    class DoubleItem : TransparentPictureBox
     {
         readonly List<string> ListImageName;
         bool isMouseDown = false;
