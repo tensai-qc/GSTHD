@@ -40,32 +40,8 @@ namespace GSTHD
             Properties.Settings.Default.Save();
         }
 
-        //private void MainForm_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    //if (e.Control && e.KeyCode == Keys.R)
-        //    //{
-        //    //    this.Controls.Clear();
-        //    //    e.Handled = true;
-        //    //    e.SuppressKeyPress = true;
-        //    //    this.Form1_Load(sender, new EventArgs());
-        //    //}
-
-        //    /*
-        //    if(e.KeyCode == Keys.F2)
-        //    {
-        //        var window = new Editor(CurrentLayout);
-        //        window.Show();
-        //    }
-        //    */
-        //}
-
         private void Initialize(object sender, EventArgs e)
         {
-            //this.AcceptButton = null;
-            //this.MaximizeBox = false;
-            //this.KeyPreview = true;
-            //this.KeyDown += changeCollectedSkulls;
-
             LoadSettings();
             LoadMenuBar();
             LoadActiveLayout();
@@ -124,7 +100,27 @@ namespace GSTHD
 
             Controls.Clear();
             ActiveLayout = layout;
-            LocalSettings.ActiveLayout = layoutPath;
+
+            if (string.IsNullOrEmpty(layoutPath) || !Path.IsPathRooted(layoutPath))
+            {
+                LocalSettings.ActiveLayout = layoutPath;
+            }
+            else
+            {
+                string baseDir = Environment.CurrentDirectory;
+                if (!string.Equals(Path.GetPathRoot(layoutPath), Path.GetPathRoot(baseDir),
+                                StringComparison.OrdinalIgnoreCase))
+                {
+                    LocalSettings.ActiveLayout = layoutPath;
+                }
+                else
+                {
+                    var baseUri = new Uri(baseDir.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar);
+                    var fileUri = new Uri(layoutPath);
+                    LocalSettings.ActiveLayout = Uri.UnescapeDataString(baseUri.MakeRelativeUri(fileUri).ToString());
+                }
+            }
+
             JsonIO.Write(LocalSettings, LocalSettings.LocalSettingsFileName);
             PostloadLayout();
         }
@@ -149,16 +145,6 @@ namespace GSTHD
             ActiveLayout = layout;
             PostloadLayout();
         }
-
-        //public SaveState()
-        //{
-        //    // TODO
-        //}
-
-        //public void LoadSavedState()
-        //{
-        //    // TODO
-        //}
 
         private LocalSettings LoadLocalSettings()
         {
@@ -265,16 +251,6 @@ namespace GSTHD
             ActiveSettings.Update();
             ActiveLayout.UpdateFromSettings();
         }
-
-        //private void changeCollectedSkulls(object sender, KeyEventArgs k)
-        //{
-        //    if (k.KeyCode == Keys.F9) { }
-        //    //button_chrono_Click(sender, new EventArgs());
-        //    if (k.KeyCode == Keys.F11) { }
-        //    //label_collectedSkulls_MouseDown(pbox_collectedSkulls.Controls[0], new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
-        //    if (k.KeyCode == Keys.F12) { }
-        //    //label_collectedSkulls_MouseDown(pbox_collectedSkulls.Controls[0], new MouseEventArgs(MouseButtons.Right, 1, 0, 0, 0));
-        //}
 
         public void Reset()
         {

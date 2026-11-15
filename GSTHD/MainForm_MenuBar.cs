@@ -91,7 +91,8 @@ namespace GSTHD
             OpenLayoutDialog = new OpenFileDialog()
             {
                 Filter = "Layout files (*.json)|*.json|All files (*.*)|*.*",
-                Title = "Load Layout"
+                Title = "Load Layout",
+                RestoreDirectory = true
             };
 
             ReadSettings();
@@ -180,12 +181,6 @@ namespace GSTHD
                     };
                     songMarkersSubMenu.DropDownItems.Add(Items.MoveLocation);
 
-                    //Items.Autocheck = new ToolStripMenuItem("Autocheck Songs", null, new EventHandler(menuBar_ToggleAutocheckSongs))
-                    //{
-                    //    CheckOnClick = true,
-                    //};
-                    //songMarkersSubMenu.DropDownItems.Add(Items.Autocheck);
-
                     SongMarkerBehaviourOptions = new Dictionary<Settings.SongMarkerBehaviourOption, ToolStripMenuItem>();
 
                     int i = 0;
@@ -261,7 +256,6 @@ namespace GSTHD
             AutocheckDragButtonOptions[LocalSettings.AutocheckDragButton].Checked = true;
 
             Items.MoveLocation.Checked = LocalSettings.MoveLocationToSong;
-            //Items.Autocheck.Checked = Settings.AutoCheckSongs;
             SongMarkerBehaviourOptions[LocalSettings.SongMarkerBehaviour].Checked = true;
 
             Items.EnableDuplicateWoth.Checked = LocalSettings.EnableDuplicateWoth;
@@ -330,7 +324,6 @@ namespace GSTHD
 
         private void MenuBar_ToggleInvertScrollWheel(object sender, EventArgs e)
         {
-            // Items.InvertScrollWheel.Checked = !Items.InvertScrollWheel.Checked;
             LocalSettings.InvertScrollWheel = Items.InvertScrollWheel.Checked;
             JsonIO.Write(LocalSettings, LocalSettings.LocalSettingsFileName);
             Form.UpdateSettings();
@@ -338,7 +331,6 @@ namespace GSTHD
 
         private void MenuBar_ToggleWraparound(object sender, EventArgs e)
         {
-            // Items.Wraparound.Checked = !Items.Wraparound.Checked;
             LocalSettings.DefaultDungeonNames.Wraparound = Items.Wraparound.Checked;
             JsonIO.Write(LocalSettings, LocalSettings.LocalSettingsFileName);
             Form.UpdateSettings();
@@ -372,16 +364,8 @@ namespace GSTHD
             Form.UpdateSettings();
         }
 
-        //private void menuBar_ToggleAutocheckSongs(object sender, EventArgs e)
-        //{
-        //    Items.Autocheck.Checked = !Items.Autocheck.Checked;
-        //    Settings.AutoCheckSongs = Items.Autocheck.Checked;
-        //    Settings.Write();
-        //}
-
         private void MenuBar_ToggleMoveLocation(object sender, EventArgs e)
         {
-            // Items.MoveLocation.Checked = !Items.MoveLocation.Checked;
             LocalSettings.MoveLocationToSong = Items.MoveLocation.Checked;
             JsonIO.Write(LocalSettings, LocalSettings.LocalSettingsFileName);
             Form.UpdateSettings();
@@ -412,7 +396,6 @@ namespace GSTHD
 
         private void MenuBar_ToggleEnableDuplicateWotH(object sender, EventArgs e)
         {
-            // Items.EnableLastWoth.Enabled = !Items.EnableLastWoth.Enabled;
             LocalSettings.EnableDuplicateWoth = Items.EnableDuplicateWoth.Checked;
             JsonIO.Write(LocalSettings, LocalSettings.LocalSettingsFileName);
             Form.UpdateSettings();
@@ -420,7 +403,6 @@ namespace GSTHD
 
         private void MenuBar_ToggleEnableLastWotH(object sender, EventArgs e)
         {
-            // Items.EnableLastWoth.Enabled = !Items.EnableLastWoth.Enabled;
             LocalSettings.EnableLastWoth = Items.EnableLastWoth.Checked;
             JsonIO.Write(LocalSettings, LocalSettings.LocalSettingsFileName);
             Form.UpdateSettings();
@@ -428,7 +410,6 @@ namespace GSTHD
 
         private void MenuBar_ToggleEnableBarrenColors(object sender, EventArgs e)
         {
-            // Items.EnableBarrenColors.Enabled = !Items.EnableBarrenColors.Enabled;
             LocalSettings.EnableBarrenColors = Items.EnableBarrenColors.Checked;
             JsonIO.Write(LocalSettings, LocalSettings.LocalSettingsFileName);
             Form.UpdateSettings();

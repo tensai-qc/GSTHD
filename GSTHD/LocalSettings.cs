@@ -17,12 +17,10 @@ namespace GSTHD
         public bool ShowMenuBar { get; set; } = true;
         public string ActiveLayout { get; set; } = string.Empty;
         public bool InvertScrollWheel { get; set; } = false;
-        //public bool WraparoundDungeonNames { get; set; } = true;
         public Settings.DragButtonOption DragButton { get; set; } = Settings.DragButtonOption.Middle;
         public Settings.DragButtonOption AutocheckDragButton { get; set; } = Settings.DragButtonOption.None;
         public int MinDragThreshold { get; set; } = 6;
         public bool MoveLocationToSong { get; set; } = false;
-        // public bool AutoCheckSongs { get; set; } = false;
         public Settings.SongMarkerBehaviourOption SongMarkerBehaviour { get; set; } = DefaultSongMarkerBehaviour;
         public string[] DefaultSongMarkerImages { get; set; } = new string[0];
         public string[] DefaultGossipStoneImages { get; set; } = new string[0];
@@ -56,13 +54,5 @@ namespace GSTHD
             FontSize = 8,
             FontStyle = FontStyle.Bold,
         };
-
-        //public static Settings.SongMarkerBehaviourOption GetSongMarkerBehaviour(string value)
-        //{
-        //    if (string.IsNullOrEmpty(value))
-        //        return DefaultSongMarkerBehaviour;
-
-        //    return (Settings.SongMarkerBehaviourOption) Enum.Parse(typeof(Settings.SongMarkerBehaviourOption), value);
-        //}
     }
 }

@@ -366,7 +366,6 @@ namespace GSTHD
         public string FontName { get; set; }
         public FontStyle FontStyle { get; set; }
         public string Color { get; set; }
-        // public Size MaxSize { get; set; }
         public bool Visible { get; set; }
     }
 

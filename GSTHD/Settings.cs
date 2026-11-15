@@ -39,12 +39,10 @@ namespace GSTHD
         public bool ShowMenuBar { get => Local.ShowMenuBar; }
         public string ActiveLayout { get => Local.ActiveLayout; }
         public bool InvertScrollWheel { get => Local.InvertScrollWheel; }
-        //public bool WraparoundDungeonNames { get => Layout.DefaultDungeonNames.Wraparound.GetValueOrDefault(Local.WraparoundDungeonNames); }
         public DragButtonOption DragButton { get => Local.DragButton; }
         public DragButtonOption AutocheckDragButton { get => Local.AutocheckDragButton; }
         public int MinDragThreshold { get => Local.MinDragThreshold; }
         public bool MoveLocationToSong { get => Local.MoveLocationToSong; }
-        // public bool AutoCheckSongs { get => LocalSettings.AutocheckSongs; }
         public SongMarkerBehaviourOption SongMarkerBehaviour { get => Local.SongMarkerBehaviour; }
         public string[] DefaultSongMarkerImages { get => Layout.DefaultSongMarkerImages ?? Local.DefaultSongMarkerImages; }
         public string[] DefaultGossipStoneImages { get => Layout.DefaultGossipStoneImages ?? Local.DefaultGossipStoneImages; }
