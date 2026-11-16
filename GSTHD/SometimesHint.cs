@@ -29,8 +29,8 @@ namespace GSTHD
             {
                 this.CustomBorder = true;
                 this.BorderStyle = BorderStyle.None;
-                this.Size = new Size(textInput.Width - borderWidth, textInput.Height - borderWidth);
-                this.Location = new Point(4, textInput.Height - textInput.FontSize * 2 + Math.Max(4 - borderWidth, 0));
+                this.Size = new Size(textInput.Width, textInput.Height);
+                this.Location = new Point(4, (textInput.Height - this.Height) / 2);
             }
             else
             {
