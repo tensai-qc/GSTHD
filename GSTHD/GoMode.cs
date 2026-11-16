@@ -31,6 +31,20 @@ namespace GSTHD
         public PictureBox GoModeImage = new PictureBox();
         Size GoModeImageSize;
 
+        public static void PaintGlowBehind(Control c, PaintEventArgs e)
+        {
+            var gm = Current;
+            var frame = gm?.CurrentFrame;
+            if (frame == null || gm.Image == null || !gm.Visible || gm.Parent != c.Parent) return;
+
+            var dest = new Rectangle(gm.Left - c.Left, gm.Top - c.Top, gm.Width, gm.Height);
+            var area = Rectangle.Intersect(dest, c.ClientRectangle);
+            if (area.IsEmpty) return;
+
+            var src = new Rectangle(area.X - dest.X, area.Y - dest.Y, area.Width, area.Height);
+            e.Graphics.DrawImage(frame, area, src, GraphicsUnit.Pixel);
+        }
+
         private void BuildFrames(string file)
         {
             using (var src = Image.FromFile(@"Resources/" + file))
@@ -101,7 +115,6 @@ namespace GSTHD
                 GoModeImage.Size = this.GoModeImageSize;
             }                        
             GoModeImage.BackColor = Color.Transparent;
-            // GoModeImage.MouseUp += Click_MouseUp;
             GoModeImage.MouseDown += Click_MouseDown;
 
             if (data.BackgroundImage != string.Empty)

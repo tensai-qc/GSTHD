@@ -24,7 +24,7 @@ namespace GSTHD
             this.ChronoTimer.Tick += new EventHandler(this.Timer_Tick);
             this.ChronoTimer.Start();
 
-            ChronoLabel = new Label
+            ChronoLabel = new TransparentLabel
             {
                 BackColor = Color.Transparent,
                 AutoSize = true,

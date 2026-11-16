@@ -74,7 +74,7 @@ namespace GSTHD
             MouseDown += DragBehaviour.Mouse_ClickDown;
             MouseMove += DragBehaviour.Mouse_Move_WithAutocheck;
 
-            SelectedDungeon = new Label
+            SelectedDungeon = new TransparentLabel
             {
                 Font = new Font(new FontFamily(data.Label.FontName), data.Label.FontSize.Value, data.Label.FontStyle.Value),
                 Text = DungeonNames[DefaultDungeonIndex],

@@ -121,7 +121,7 @@ namespace GSTHD
 
                             if (obj.Visible)
                             {
-                                Controls.Add(new Label()
+                                Controls.Add(new TransparentLabel()
                                 {
                                     Text = obj.Text,
                                     Left = obj.X,

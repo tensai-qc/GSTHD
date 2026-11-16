@@ -67,7 +67,7 @@ namespace GSTHD
             TabStop = false;
 
 
-            ItemCount = new Label
+            ItemCount = new TransparentLabel
             {
                 BackColor = Color.Transparent,
                 BorderStyle = BorderStyle.None,
