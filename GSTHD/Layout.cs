@@ -41,6 +41,16 @@ namespace GSTHD
             SetSizeFromSettings();
         }
 
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED
+                return cp;
+            }
+        }
+
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             base.OnPaintBackground(e);
@@ -509,7 +519,7 @@ namespace GSTHD
         public int Y { get; set; }
         public bool Visible { get; set; }
         public Color BackColor { get; set; }
-                public int Width { get; set; }
+        public int Width { get; set; }
         public int Height { get; set; }
         public int NbMaxRows { get; set; }
         public bool IsScrollable { get; set; }

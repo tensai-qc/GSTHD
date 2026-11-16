@@ -10,6 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace GSTHD
 {
@@ -132,7 +134,7 @@ namespace GSTHD
             {
                 layout = PreloadLayout(LocalSettings.ActiveLayout);
             }
-            catch (GSTHDException ex)  when (
+            catch (GSTHDException ex) when (
                 ex is FilesNotFoundException ||
                 ex is InvalidLayoutFileException)
             {
@@ -222,13 +224,26 @@ namespace GSTHD
             ActiveLayout.BackColor = BackColor;
         }
 
-        private void SetBackImage() 
+        private void SetBackImage()
         {
             if (ActiveLayout.Settings.BackgroundImage != null)
             {
-                BackgroundImage = Image.FromFile(@"Resources/" + ActiveLayout.Settings.BackgroundImage);
-                ActiveLayout.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-                ActiveLayout.BackgroundImage = BackgroundImage;
+                PerformLayout();
+                var size = ActiveLayout.ClientSize;
+
+                using (var src = Image.FromFile(@"Resources/" + ActiveLayout.Settings.BackgroundImage))
+                {
+                    var scaled = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppPArgb);
+                    using (var g = Graphics.FromImage(scaled))
+                    {
+                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        g.DrawImage(src, new Rectangle(Point.Empty, size));
+                    }
+
+                    BackgroundImage = scaled;
+                    ActiveLayout.BackgroundImageLayout = ImageLayout.None;
+                    ActiveLayout.BackgroundImage = scaled;
+                }
             }
         }
 
@@ -259,7 +274,7 @@ namespace GSTHD
             ReloadActiveLayout();
             Process.GetCurrentProcess().Refresh();
         }
-        
+
         public void ShowErrorMessage(GSTHDException ex)
         {
             MessageBox.Show(ex.Message, $"{Config.ErrorMessageTitlePrefix}: {ex.Title}");

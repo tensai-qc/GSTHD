@@ -23,7 +23,7 @@ namespace GSTHD
             new Rectangle(Left + glowDirty.X, Top + glowDirty.Y, glowDirty.Width, glowDirty.Height);
 
         readonly List<string> ListImageName;
-        private new readonly string BackgroundImage;        
+        private new readonly string BackgroundImage;
         Point FirstLocation;
         readonly Timer tictac;
         int imageIndex = 0;
@@ -107,13 +107,13 @@ namespace GSTHD
 
             this.FirstLocation = new Point(data.X, data.Y);
 
-            if(ListImageName.Count > 0)
+            if (ListImageName.Count > 0)
             {
                 GoModeImage.Name = ListImageName[0];
                 GoModeImage.Image = Image.FromFile(@"Resources/" + ListImageName[0]);
                 GoModeImage.SizeMode = PictureBoxSizeMode.StretchImage;
                 GoModeImage.Size = this.GoModeImageSize;
-            }                        
+            }
             GoModeImage.BackColor = Color.Transparent;
             GoModeImage.MouseDown += Click_MouseDown;
 
@@ -185,6 +185,19 @@ namespace GSTHD
         {
             GoModeImage.Location = new Point(this.Width / 2 - GoModeImage.Width / 2, this.Height / 2 - GoModeImage.Height / 2);
             this.Location = new Point(this.FirstLocation.X - GoModeImage.Location.X, this.FirstLocation.Y - GoModeImage.Location.Y);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                tictac?.Stop();
+                tictac?.Dispose();
+                if (glowFrames != null)
+                    foreach (var f in glowFrames) f?.Dispose();
+                if (Current == this) Current = null;
+            }
+            base.Dispose(disposing);
         }
     }
 }
