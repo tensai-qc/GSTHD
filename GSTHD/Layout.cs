@@ -24,6 +24,11 @@ namespace GSTHD
         public JObject Json;
         public LayoutSettings Settings;
         private GoMode goModeControl;
+        public double ScaleFactor => Math.Max(1, Math.Min(100, Settings.Scale)) / 100.0;
+        private int Pos(int v) => (int)Math.Round(v * ScaleFactor);
+        private int Dim(int v) => v <= 0 ? v : Math.Max(1, Pos(v));
+        private Size Dim(Size s) => new Size(Dim(s.Width), Dim(s.Height));
+
         public Layout(string filePath)
         {
             DoubleBuffered = true;
@@ -49,6 +54,67 @@ namespace GSTHD
                 cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED
                 return cp;
             }
+        }
+
+        private void ScaleObject(GenericLabel o) { o.X = Pos(o.X); o.Y = Pos(o.Y); o.FontSize = Dim(o.FontSize); }
+
+        private void ScaleObject(GenericTextBox o)
+        {
+            o.X = Pos(o.X); o.Y = Pos(o.Y); o.Width = Dim(o.Width); o.Height = Dim(o.Height); o.FontSize = Dim(o.FontSize);
+        }
+
+        private void ScaleObject(ObjectPoint o) { o.X = Pos(o.X); o.Y = Pos(o.Y); o.Size = Dim(o.Size); }
+
+        private void ScaleObject(ObjectPointSong o) { o.X = Pos(o.X); o.Y = Pos(o.Y); o.Size = Dim(o.Size); }
+
+        private void ScaleObject(ObjectPointGoMode o) { o.X = Pos(o.X); o.Y = Pos(o.Y); o.Size = Dim(o.Size); }
+
+        private void ScaleObject(ObjectPointMedallion o)
+        {
+            o.X = Pos(o.X); o.Y = Pos(o.Y); o.Size = Dim(o.Size);
+            if (o.Label?.FontSize != null) o.Label.FontSize = Dim(o.Label.FontSize.Value);
+        }
+
+        private void ScaleObject(ObjectPointGrid o)
+        {
+            o.X = Pos(o.X); o.Y = Pos(o.Y); o.Size = Dim(o.Size);
+            o.Spacing = new Size(Pos(o.Spacing.Width), Pos(o.Spacing.Height));
+        }
+
+        private void ScaleObject(ObjectPointCollectedItem o)
+        {
+            o.X = Pos(o.X); o.Y = Pos(o.Y); o.Size = Dim(o.Size);
+            o.CountPosition = new Size(Pos(o.CountPosition.Width), Pos(o.CountPosition.Height));
+            o.LabelFontSize = Dim(o.LabelFontSize);
+        }
+
+        private void ScaleObject(AutoFillTextBox o)
+        {
+            o.X = Pos(o.X); o.Y = Pos(o.Y); o.Width = Dim(o.Width); o.Height = Dim(o.Height);
+            o.FontSize = Dim(o.FontSize);
+
+            if (o.BorderWidth > 0)
+            {
+                int bw = Dim(o.BorderWidth);
+                bw = (bw + 1) / 2 * 2;
+                o.BorderWidth = System.Math.Max(2, bw);
+            }
+        }
+
+        private void ScaleObject(ObjectPanelWotH o)
+        {
+            o.X = Pos(o.X); o.Y = Pos(o.Y); o.Width = Dim(o.Width); o.Height = Dim(o.Height);
+            o.TextBoxHeight = Dim(o.TextBoxHeight); o.TextBoxFontSize = Dim(o.TextBoxFontSize);
+            o.LabelHeight = Dim(o.LabelHeight); o.LabelFontSize = Dim(o.LabelFontSize);
+            o.GossipStoneSize = Dim(o.GossipStoneSize); o.GossipStoneSpacing = Pos(o.GossipStoneSpacing);
+            o.PathGoalSpacing = Pos(o.PathGoalSpacing);
+        }
+
+        private void ScaleObject(ObjectPanelBarren o)
+        {
+            o.X = Pos(o.X); o.Y = Pos(o.Y); o.Width = Dim(o.Width); o.Height = Dim(o.Height);
+            o.TextBoxWidth = Dim(o.TextBoxWidth); o.TextBoxHeight = Dim(o.TextBoxHeight); o.TextBoxFontSize = Dim(o.TextBoxFontSize);
+            o.LabelWidth = Dim(o.LabelWidth); o.LabelHeight = Dim(o.LabelHeight); o.LabelFontSize = Dim(o.LabelFontSize);
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
@@ -91,6 +157,10 @@ namespace GSTHD
                 throw new InvalidLayoutFileException(FilePath, "no LayoutSettings section");
             }
             Settings = JsonConvert.DeserializeObject<LayoutSettings>(settingsToken.ToString());
+            if (Settings.DefaultDungeonNames?.FontSize != null)
+            {
+                Settings.DefaultDungeonNames.FontSize = Dim(Settings.DefaultDungeonNames.FontSize.Value);
+            }
         }
 
         private void SetSizeFromSettings()
@@ -99,7 +169,7 @@ namespace GSTHD
             {
                 throw new InvalidLayoutFileException(FilePath, "invalid size");
             }
-            Size = new Size(Math.Max(144, Settings.Width), Math.Max(80, Settings.Height));
+            Size = new Size(Math.Max(144, Dim(Settings.Width)), Math.Max(80, Dim(Settings.Height)));
         }
 
         public void LoadContents(Settings activeSettings, SortedSet<string> listSometimesHintsSuggestions, Dictionary<string, string> listPlacesWithTag)
@@ -128,6 +198,7 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<GenericLabel>(element.ToString());
+                            ScaleObject(obj);
 
                             if (obj.Visible)
                             {
@@ -149,6 +220,7 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<GenericTextBox>(element.ToString());
+                            ScaleObject(obj);
 
                             if (obj.Visible)
                             {
@@ -168,6 +240,7 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPoint>(element.ToString());
+                            ScaleObject(obj);
 
                             if (obj.Visible)
                             {
@@ -180,9 +253,10 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPointSong>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
                             {
-                                var song = new Song(obj, activeSettings);
+                                var song = new Song(obj, activeSettings, ScaleFactor);
                                 Controls.Add(song);
                                 ListUpdatables.Add(song);
                             }
@@ -193,6 +267,7 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPoint>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
                                 Controls.Add(new DoubleItem(obj));
                         }
@@ -202,8 +277,9 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPointCollectedItem>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
-                                Controls.Add(new CollectedItem(obj, activeSettings));
+                                Controls.Add(new CollectedItem(obj, activeSettings, ScaleFactor));
                         }
                         break;
 
@@ -211,6 +287,7 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPointMedallion>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
                             {
                                 var medallion = new Medallion(obj, activeSettings);
@@ -227,6 +304,7 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPoint>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
                                 Controls.Add(new GuaranteedHint(obj));
                         }
@@ -236,6 +314,7 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPoint>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
                                 Controls.Add(new GossipStone(obj, activeSettings, false, Color.Transparent));
                         }
@@ -245,6 +324,7 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPointGrid>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
                             {
                                 for (int j = 0; j < obj.Rows; j++)
@@ -273,6 +353,7 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<AutoFillTextBox>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
                             {
                                 if (obj.BorderWidth > 0)
@@ -307,6 +388,7 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<AutoFillTextBox>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
                                 Controls.Add(new Chronometer(obj).ChronoLabel);
                         }
@@ -316,9 +398,10 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPanelWotH>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
                             {
-                                var panel = new PanelWothBarren(obj, activeSettings);
+                                var panel = new PanelWothBarren(obj, activeSettings, ScaleFactor);
                                 panel.PanelWoth(listPlacesWithTag, obj);
                                 Controls.Add(panel);
                                 Controls.Add(panel.textBoxCustom.SuggestionContainer);
@@ -332,9 +415,10 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPanelBarren>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
                             {
-                                var panel = new PanelWothBarren(obj, activeSettings);
+                                var panel = new PanelWothBarren(obj, activeSettings, ScaleFactor);
                                 panel.PanelBarren(listPlacesWithTag, obj);
                                 Controls.Add(panel);
                                 Controls.Add(panel.textBoxCustom.SuggestionContainer);
@@ -348,9 +432,10 @@ namespace GSTHD
                         foreach (var element in category.Value)
                         {
                             var obj = JsonConvert.DeserializeObject<ObjectPointGoMode>(element.ToString());
+                            ScaleObject(obj);
                             if (obj.Visible)
                             {
-                                goMode = new GoMode(obj);
+                                goMode = new GoMode(obj, ScaleFactor);
                             }
                         }
                         break;
@@ -579,6 +664,7 @@ namespace GSTHD
     {
         public int Width { get; set; }
         public int Height { get; set; }
+        public int Scale { get; set; } = 100;
         public string BackgroundImage { get; set; }
         public Color? BackgroundColor { get; set; }
         public string[] DefaultSongMarkerImages { get; set; } = null;

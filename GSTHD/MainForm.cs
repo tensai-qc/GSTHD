@@ -199,7 +199,14 @@ namespace GSTHD
 
         private void SetSize()
         {
-            Size = new Size(ActiveLayout.Size.Width, ActiveLayout.Size.Height + MenuBar.Size.Height);
+            double s = ActiveLayout.ScaleFactor;
+
+            int chromeW = Size.Width - ClientSize.Width;
+            int chromeH = Size.Height - ClientSize.Height;
+
+            Size = new Size(
+                ActiveLayout.Size.Width + (int)System.Math.Round(chromeW * (1 - s)),
+                ActiveLayout.Size.Height + MenuBar.Size.Height + (int)System.Math.Round(chromeH * (1 - s)));
         }
 
         private bool IsOnScreen(Point location, Size size)

@@ -30,7 +30,7 @@ namespace GSTHD
         private readonly Color LabelColor;
         private readonly Color CountMaxLabelColor;
 
-        public CollectedItem(ObjectPointCollectedItem data, Settings settings)
+        public CollectedItem(ObjectPointCollectedItem data, Settings settings, double scale = 1.0)
         {
             Settings = settings;
 
@@ -62,11 +62,14 @@ namespace GSTHD
             DragBehaviour = new DraggableAutocheckElementBehaviour<int>(this, Settings);
 
             Location = new Point(data.X, data.Y);
-            CollectedItemCountPosition = data.CountPosition.IsEmpty ? new Size(0, -7) : data.CountPosition;
+            CollectedItemCountPosition = data.CountPosition.IsEmpty
+                ? new Size(0, -(int)System.Math.Round(7 * scale))
+                : data.CountPosition;
             BackColor = Color.Transparent;
             TabStop = false;
 
-
+            int labelW = System.Math.Max(1, (int)System.Math.Round(40 * scale));
+            int labelH = System.Math.Max(1, (int)System.Math.Round(30 * scale));
             ItemCount = new TransparentLabel
             {
                 BackColor = Color.Transparent,
@@ -76,9 +79,11 @@ namespace GSTHD
                 ForeColor = data.LabelColor,
                 AutoSize = false,
                 TextAlign = ContentAlignment.MiddleCenter,
-                Height = 30,
-                Width = 40,
-                Location = new Point((CollectedItemSize.Width / 2) + CollectedItemCountPosition.Width - 19, (CollectedItemSize.Height / 2) + CollectedItemCountPosition.Height - 15),
+                Height = labelH,
+                Width = labelW,
+                Location = new Point(
+                    (CollectedItemSize.Width / 2) + CollectedItemCountPosition.Width - (int)System.Math.Round(19 * scale),
+                    (CollectedItemSize.Height / 2) + CollectedItemCountPosition.Height - (int)System.Math.Round(15 * scale)),
             };
 
             MouseDown += ProgressBehaviour.Mouse_ClickDown;

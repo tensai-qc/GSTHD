@@ -45,15 +45,21 @@ namespace GSTHD
             e.Graphics.DrawImage(frame, area, src, GraphicsUnit.Pixel);
         }
 
-        private void BuildFrames(string file)
+        private void BuildFrames(string file, double scale)
         {
             using (var src = Image.FromFile(@"Resources/" + file))
             {
-                var rect = new Rectangle(0, 0, src.Width, src.Height);
+                int w = Math.Max(1, (int)Math.Round(src.Width * scale));
+                int h = Math.Max(1, (int)Math.Round(src.Height * scale));
+                var rect = new Rectangle(0, 0, w, h);
+
                 glowFrames = new Bitmap[4];
-                glowFrames[0] = new Bitmap(src.Width, src.Height, PixelFormat.Format32bppPArgb);
+                glowFrames[0] = new Bitmap(w, h, PixelFormat.Format32bppPArgb);
                 using (var g = Graphics.FromImage(glowFrames[0]))
+                {
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     g.DrawImage(src, rect);
+                }
 
                 for (int i = 1; i < 4; i++)
                 {
@@ -89,7 +95,7 @@ namespace GSTHD
             return maxX < 0 ? Rectangle.Empty : Rectangle.FromLTRB(minX, minY, maxX + 1, maxY + 1);
         }
 
-        public GoMode(ObjectPointGoMode data)
+        public GoMode(ObjectPointGoMode data, double scale = 1.0)
         {
             Current = this;
             tictac = new Timer
@@ -121,7 +127,7 @@ namespace GSTHD
             {
                 BackgroundImage = data.BackgroundImage;
                 this.Name = data.BackgroundImage;
-                BuildFrames(data.BackgroundImage);
+                BuildFrames(data.BackgroundImage, scale);
             }
             this.BackColor = Color.Transparent;
             this.Controls.Add(GoModeImage);

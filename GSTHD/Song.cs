@@ -18,7 +18,7 @@ namespace GSTHD
         private readonly ProgressibleElementBehaviour<SongMarkerState> ProgressBehaviour;
         private readonly DraggableElementBehaviour<SongMarkerState> DragBehaviour;
 
-        private string[] ImageNames;
+        private readonly string[] ImageNames;
         private bool HoldsImage;
         private string HeldImageName;
         private int ImageIndex = 0;
@@ -27,7 +27,7 @@ namespace GSTHD
 
         public Song Song;
 
-        public SongMarker(Song song, Settings settings, string[] imageCollection)
+        public SongMarker(Song song, Settings settings, string[] imageCollection, double scale = 1.0)
         {
             Song = song;
             Settings = settings;
@@ -50,13 +50,9 @@ namespace GSTHD
                 Name = Song.Name + "_SongMarker";
                 UpdateImage();
                 SizeMode = PictureBoxSizeMode.StretchImage;
-                Size = new Size(Image.Width, Image.Height);
-
-                //if (data.DragAndDropImageName != string.Empty)
-                //    SongMarker.Tag = data.DragAndDropImageName;
-                //else
-                //    SongMarker.Tag = ImageNames[1];
-
+                Size = new Size(
+                    System.Math.Max(1, (int)System.Math.Round(Image.Width * scale)),
+                    System.Math.Max(1, (int)System.Math.Round(Image.Height * scale)));
             }
         }
 
@@ -233,7 +229,7 @@ namespace GSTHD
         private readonly string DragPictureName;
 
         public string[] ImageNames;
-        string ActiveImageName;
+        readonly string ActiveImageName;
 
         private int ImageIndex = 0;
 
@@ -241,7 +237,7 @@ namespace GSTHD
 
         Size SongSize;
 
-        public Song(ObjectPointSong data, Settings settings)
+        public Song(ObjectPointSong data, Settings settings, double scale = 1.0)
         {
             Settings = settings;
             ProgressBehaviour = new ProgressibleElementBehaviour<int>(this, settings);
@@ -255,7 +251,7 @@ namespace GSTHD
 
             Name = data.Name;
             SongSize = data.Size;
-            
+
             BackColor = Color.Transparent;
             Location = new Point(data.X, data.Y);
             TabStop = false;
@@ -272,7 +268,7 @@ namespace GSTHD
                     DragPictureName = data.DragAndDropImageName;
             }
 
-            SongMarker = new SongMarker(this, settings, data.TinyImageCollection)
+            SongMarker = new SongMarker(this, settings, data.TinyImageCollection, scale)
             {
                 BackColor = Color.Transparent,
                 TabStop = false,

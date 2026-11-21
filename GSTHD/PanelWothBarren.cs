@@ -28,7 +28,10 @@ namespace GSTHD
         Label LabelSettings = new Label();
         private readonly Color GoalBackColor;
 
-        public PanelWothBarren(ObjectPanelWotH data, Settings settings)
+        private int ScrollStep = 15;
+        private int WothLeftOffset = 2;
+
+        public PanelWothBarren(ObjectPanelWotH data, Settings settings, double scale = 1.0)
         {
             Settings = settings;
 
@@ -46,9 +49,11 @@ namespace GSTHD
             if (data.IsScrollable)
                 this.MouseWheel += Panel_MouseWheel;
             this.GoalBackColor = data.GoalBackColor;
+
+            SetScale(scale);
         }
 
-        public PanelWothBarren(ObjectPanelBarren data, Settings settings)
+        public PanelWothBarren(ObjectPanelBarren data, Settings settings, double scale = 1.0)
         {
             Settings = settings;
 
@@ -59,6 +64,14 @@ namespace GSTHD
             this.TabStop = false;
             if (data.IsScrollable)
                 this.MouseWheel += Panel_MouseWheel;
+
+            SetScale(scale);
+        }
+
+        private void SetScale(double scale)
+        {
+            ScrollStep = System.Math.Max(1, (int)System.Math.Round(15 * scale));
+            WothLeftOffset = (int)System.Math.Round(2 * scale);
         }
 
         public void UpdateFromSettings()
@@ -76,28 +89,18 @@ namespace GSTHD
         private void Panel_MouseWheel(object sender, MouseEventArgs e)
         {
             var panel = (Panel)sender;
-            if (e.Delta < 0)
+            int dy = e.Delta < 0 ? -ScrollStep : (e.Delta > 0 ? ScrollStep : 0);
+
+            if (dy != 0)
             {
                 foreach (var element in panel.Controls)
                 {
                     if (element is Label label)
-                        label.Location = new Point(label.Location.X, label.Location.Y - 15);
+                        label.Location = new Point(label.Location.X, label.Location.Y + dy);
                     if (element is GossipStone stone)
-                        stone.Location = new Point(stone.Location.X, stone.Location.Y - 15);
+                        stone.Location = new Point(stone.Location.X, stone.Location.Y + dy);
                     if (element is TextBox box)
-                        box.Location = new Point(box.Location.X, box.Location.Y - 15);
-                }
-            }
-            if (e.Delta > 0)
-            {
-                foreach (var element in panel.Controls)
-                {
-                    if (element is Label label)
-                        label.Location = new Point(label.Location.X, label.Location.Y + 15);
-                    if (element is GossipStone stone)
-                        stone.Location = new Point(stone.Location.X, stone.Location.Y + 15);
-                    if (element is TextBox box)
-                        box.Location = new Point(box.Location.X, box.Location.Y + 15);
+                        box.Location = new Point(box.Location.X, box.Location.Y + dy);
                 }
             }
             ((PanelWothBarren)panel).SetSuggestionContainer();
@@ -229,7 +232,7 @@ namespace GSTHD
                                 newWotH = new WotH(Settings, selectedPlace,
                                     GossipStoneCount, ListImage_WothItemsOption, GossipStoneSpacing,
                                     PathGoalCount, ListImage_GoalsOption, PathGoalSpacing,
-                                    new Point(2, -LabelSettings.Height), LabelSettings, GossipStoneSize, WothColors, GoalBackColor);
+                                    new Point(WothLeftOffset, -LabelSettings.Height), LabelSettings, GossipStoneSize, WothColors, GoalBackColor);
                             else
                             {
                                 var lastLocation = ListWotH.Last().LabelPlace.Location;
@@ -381,7 +384,7 @@ namespace GSTHD
                     ListWotH[i].listGossipStone[j].Location = new Point(newX, newY);
                 }
             }
-            textBoxCustom.NewLocation(new Point(2, ListWotH.Count * woth.LabelPlace.Height), this.Location);
+            textBoxCustom.NewLocation(new Point(WothLeftOffset, ListWotH.Count * woth.LabelPlace.Height), this.Location);
         }
 
         public void RemoveBarren(Barren barren)
