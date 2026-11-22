@@ -100,8 +100,10 @@ namespace GSTHD
                 return;
             }
 
+            var oldLayout = ActiveLayout;
             Controls.Clear();
             ActiveLayout = layout;
+            oldLayout?.Dispose();
 
             if (string.IsNullOrEmpty(layoutPath) || !Path.IsPathRooted(layoutPath))
             {
@@ -143,8 +145,10 @@ namespace GSTHD
                 return;
             }
 
+            var oldLayout = ActiveLayout;
             Controls.Clear();
             ActiveLayout = layout;
+            oldLayout?.Dispose();
             PostloadLayout();
         }
 
@@ -233,24 +237,34 @@ namespace GSTHD
 
         private void SetBackImage()
         {
+            var oldBackground = BackgroundImage;
+
             if (ActiveLayout.Settings.BackgroundImage != null)
             {
                 PerformLayout();
                 var size = ActiveLayout.ClientSize;
 
-                using (var src = Image.FromFile(@"Resources/" + ActiveLayout.Settings.BackgroundImage))
-                {
-                    var scaled = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppPArgb);
-                    using (var g = Graphics.FromImage(scaled))
-                    {
-                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        g.DrawImage(src, new Rectangle(Point.Empty, size));
-                    }
+                var src = ImageCache.Get(ActiveLayout.Settings.BackgroundImage);
 
-                    BackgroundImage = scaled;
-                    ActiveLayout.BackgroundImageLayout = ImageLayout.None;
-                    ActiveLayout.BackgroundImage = scaled;
+                var scaled = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppPArgb);
+                using (var g = Graphics.FromImage(scaled))
+                {
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    g.DrawImage(src, new Rectangle(Point.Empty, size));
                 }
+
+                BackgroundImage = scaled;
+                ActiveLayout.BackgroundImageLayout = ImageLayout.None;
+                ActiveLayout.BackgroundImage = scaled;
+            }
+            else
+            {
+                BackgroundImage = null;
+            }
+
+            if (oldBackground != null && oldBackground != BackgroundImage)
+            {
+                oldBackground.Dispose();
             }
         }
 

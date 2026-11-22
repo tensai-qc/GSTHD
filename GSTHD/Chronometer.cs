@@ -39,7 +39,11 @@ namespace GSTHD
             };
             this.ChronoLabel.MouseClick += Label_Chrono_MouseClick;
 
-            
+            ChronoLabel.Disposed += (s, e) =>
+            {
+                ChronoTimer.Stop();
+                ChronoTimer.Dispose();
+            };
         }
 
         private void Label_Chrono_MouseClick(object sender, MouseEventArgs e)

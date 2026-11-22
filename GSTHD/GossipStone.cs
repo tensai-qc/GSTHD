@@ -104,11 +104,11 @@ namespace GSTHD
         {
             if (HoldsImage)
             {
-                Image = Image.FromFile(@"Resources/" + HeldImageName);
+                Image = ImageCache.Get(HeldImageName);
             }
             else
             {
-                Image = Image.FromFile(@"Resources/" + ImageNames[ImageIndex]);
+                Image = ImageCache.Get(ImageNames[ImageIndex]);
             }
         }
 

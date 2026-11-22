@@ -23,7 +23,7 @@ namespace GSTHD
             if (ListImageName.Count > 0)
             {
                 this.Name = ListImageName[0];
-                this.Image = Image.FromFile(@"Resources/" + ListImageName[0]);
+                this.Image = ImageCache.Get(ListImageName[0]);
                 this.SizeMode = PictureBoxSizeMode.StretchImage;
                 this.Size = DoubleItemSize;
             }
@@ -43,25 +43,25 @@ namespace GSTHD
             {
                 if (!isColoredLeft && !isColoredRight)
                 {
-                    this.Image = Image.FromFile(@"Resources/" + ListImageName[1]);
+                    this.Image = ImageCache.Get(ListImageName[1]);
                     this.Name = ListImageName[1];
                     isColoredLeft = true;
                 }
                 else if (isColoredLeft && !isColoredRight)
                 {
-                    this.Image = Image.FromFile(@"Resources/" + ListImageName[0]);
+                    this.Image = ImageCache.Get(ListImageName[0]);
                     this.Name = ListImageName[0];
                     isColoredLeft = false;
                 }
                 else if (!isColoredLeft && isColoredRight)
                 {
-                    this.Image = Image.FromFile(@"Resources/" + ListImageName[3]);
+                    this.Image = ImageCache.Get(ListImageName[3]);
                     this.Name = ListImageName[3];
                     isColoredLeft = true;
                 }
                 else if (isColoredLeft && isColoredRight)
                 {
-                    this.Image = Image.FromFile(@"Resources/" + ListImageName[2]);
+                    this.Image = ImageCache.Get(ListImageName[2]);
                     this.Name = ListImageName[2];
                     isColoredLeft = false;
                 }
@@ -71,25 +71,25 @@ namespace GSTHD
             {
                 if (!isColoredLeft && !isColoredRight)
                 {
-                    this.Image = Image.FromFile(@"Resources/" + ListImageName[2]);
+                    this.Image = ImageCache.Get(ListImageName[2]);
                     this.Name = ListImageName[2];
                     isColoredRight = true;
                 }
                 else if (isColoredLeft && !isColoredRight)
                 {
-                    this.Image = Image.FromFile(@"Resources/" + ListImageName[3]);
+                    this.Image = ImageCache.Get(ListImageName[3]);
                     this.Name = ListImageName[3];
                     isColoredRight = true;
                 }
                 else if (!isColoredLeft && isColoredRight)
                 {
-                    this.Image = Image.FromFile(@"Resources/" + ListImageName[0]);
+                    this.Image = ImageCache.Get(ListImageName[0]);
                     this.Name = ListImageName[0];
                     isColoredRight = false;
                 }
                 else if (isColoredLeft && isColoredRight)
                 {
-                    this.Image = Image.FromFile(@"Resources/" + ListImageName[1]);
+                    this.Image = ImageCache.Get(ListImageName[1]);
                     this.Name = ListImageName[1];
                     isColoredRight = false;
                 }

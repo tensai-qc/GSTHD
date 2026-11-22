@@ -60,7 +60,7 @@ namespace GSTHD
 
         private void UpdateImage()
         {
-            Image = Image.FromFile(@"Resources/" + ImageNames[ImageIndex]);
+            Image = ImageCache.Get(ImageNames[ImageIndex]);
         }
 
         public int GetState()

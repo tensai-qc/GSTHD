@@ -116,7 +116,7 @@ namespace GSTHD
             if (ListImageName.Count > 0)
             {
                 GoModeImage.Name = ListImageName[0];
-                GoModeImage.Image = Image.FromFile(@"Resources/" + ListImageName[0]);
+                GoModeImage.Image = ImageCache.Get(ListImageName[0]);
                 GoModeImage.SizeMode = PictureBoxSizeMode.StretchImage;
                 GoModeImage.Size = this.GoModeImageSize;
             }
@@ -166,7 +166,7 @@ namespace GSTHD
             tictac.Enabled = imageIndex > 0;
 
             var pbox = (PictureBox)sender;
-            pbox.Image = Image.FromFile(@"Resources/" + ListImageName[imageIndex]);
+            pbox.Image = ImageCache.Get(ListImageName[imageIndex]);
             pbox.Name = ListImageName[imageIndex];
             pbox.Size = GoModeImageSize;
 

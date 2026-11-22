@@ -52,7 +52,7 @@ namespace GSTHD
 
             if (ImageNames.Length > 0)
             {
-                Image = Image.FromFile(@"Resources/" + ImageNames[0]);
+                Image = ImageCache.Get(ImageNames[0]);
                 Name = ImageNames[0];
                 SizeMode = PictureBoxSizeMode.StretchImage;
                 Size = CollectedItemSize;
@@ -144,7 +144,7 @@ namespace GSTHD
 
         private void UpdateImage()
         {
-            Image = Image.FromFile(@"Resources/" + ImageNames[ImageIndex]);
+            Image = ImageCache.Get(ImageNames[ImageIndex]);
         }
 
         public int GetState()

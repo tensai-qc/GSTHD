@@ -115,11 +115,11 @@ namespace GSTHD
         {
             if (HoldsImage)
             {
-                Image = Image.FromFile(@"Resources/" + HeldImageName);
+                Image = ImageCache.Get(HeldImageName);
             }
             else
             {
-                Image = Image.FromFile(@"Resources/" + ImageNames[ImageIndex]);
+                Image = ImageCache.Get(ImageNames[ImageIndex]);
             }
         }
 
@@ -341,7 +341,7 @@ namespace GSTHD
 
         private void UpdateImage()
         {
-            Image = Image.FromFile(@"Resources/" + ImageNames[ImageIndex]);
+            Image = ImageCache.Get(ImageNames[ImageIndex]);
         }
 
         private void Mouse_Move(object sender, MouseEventArgs e)

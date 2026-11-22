@@ -22,7 +22,7 @@ namespace GSTHD
             if (ListImageName.Count > 0)
             {
                 this.Name = ListImageName[0];
-                this.Image = Image.FromFile(@"Resources/" + ListImageName[0]);
+                this.Image = ImageCache.Get(ListImageName[0]);
                 this.SizeMode = PictureBoxSizeMode.StretchImage;
                 this.Size = GuaranteddHintSize;
             }            
