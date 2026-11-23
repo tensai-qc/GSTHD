@@ -636,6 +636,7 @@ namespace GSTHD
         public bool Visible { get; set; }
         public string[] ImageCollection { get; set; }
         public string BackgroundImage { get; set; }
+        public float BackgroundImageIntensity { get; set; }
     }
 
     public class ObjectPointCollectedItem

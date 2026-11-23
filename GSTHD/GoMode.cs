@@ -45,10 +45,17 @@ namespace GSTHD
             e.Graphics.DrawImage(frame, area, src, GraphicsUnit.Pixel);
         }
 
-        private void BuildFrames(string file, double scale)
+        private void BuildFrames(string file, double scale, float intensity)
         {
             using (var src = Image.FromFile(@"Resources/" + file))
             {
+                if (src.Width != src.Height)
+                {
+                    throw new InvalidLayoutFileException(
+                        $"Go Mode background image \"{file}\" must be square (is {src.Width}x{src.Height})"
+                    );
+                }
+
                 int w = Math.Max(1, (int)Math.Round(src.Width * scale));
                 int h = Math.Max(1, (int)Math.Round(src.Height * scale));
                 var rect = new Rectangle(0, 0, w, h);
@@ -56,9 +63,11 @@ namespace GSTHD
                 glowFrames = new Bitmap[4];
                 glowFrames[0] = new Bitmap(w, h, PixelFormat.Format32bppPArgb);
                 using (var g = Graphics.FromImage(glowFrames[0]))
+                using (var attrs = new ImageAttributes())
                 {
                     g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    g.DrawImage(src, rect);
+                    attrs.SetColorMatrix(new ColorMatrix { Matrix33 = intensity });
+                    g.DrawImage(src, new Rectangle(0, 0, w, h), 0, 0, src.Width, src.Height, GraphicsUnit.Pixel, attrs);
                 }
 
                 for (int i = 1; i < 4; i++)
@@ -71,7 +80,7 @@ namespace GSTHD
             glowDirty = Rectangle.Empty;
             foreach (var f in glowFrames)
             {
-                var b = OpaqueBounds(f);
+                var b = OpaqueBounds(f, (byte)Math.Min(255, 40 * intensity));
                 glowDirty = glowDirty.IsEmpty ? b : Rectangle.Union(glowDirty, b);
             }
         }
@@ -97,7 +106,6 @@ namespace GSTHD
 
         public GoMode(ObjectPointGoMode data, double scale = 1.0)
         {
-            Current = this;
             tictac = new Timer
             {
                 Interval = 95
@@ -127,10 +135,11 @@ namespace GSTHD
             {
                 BackgroundImage = data.BackgroundImage;
                 this.Name = data.BackgroundImage;
-                BuildFrames(data.BackgroundImage, scale);
+                BuildFrames(data.BackgroundImage, scale, data.BackgroundImageIntensity > 0 ? data.BackgroundImageIntensity : 1f);
             }
             this.BackColor = Color.Transparent;
             this.Controls.Add(GoModeImage);
+            Current = this;
         }
 
         private void Tictac_Tick(object sender, EventArgs e)
