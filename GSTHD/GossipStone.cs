@@ -10,6 +10,8 @@ namespace GSTHD
         public bool HoldsImage;
         public string HeldImageName;
         public int ImageIndex;
+        public string[] HeldCollection;
+        public int HeldIndex;
     }
 
     public class GossipStone : TransparentPictureBox, IProgressibleElement<GossipStoneState>, IDraggableElement<GossipStoneState>
@@ -24,6 +26,9 @@ namespace GSTHD
         private int ImageIndex = 0;
         private bool RemoveImage;
         private bool Reversable;
+
+        private string[] HeldCollection;
+        private int HeldIndex;
 
         Size GossipStoneSize;
 
@@ -77,7 +82,21 @@ namespace GSTHD
             ImageIndex = 0;
             HoldsImage = true;
             var dropContent = (DragDropContent)e.Data.GetData(typeof(DragDropContent));
-            HeldImageName = dropContent.ImageName;
+
+            var collection = dropContent.ImageCollection;
+            if (collection != null && collection.Length > 0)
+            {
+                HeldCollection = collection;
+                HeldIndex = System.Math.Max(0, System.Math.Min(dropContent.ImageIndex, collection.Length - 1));
+                HeldImageName = HeldCollection[HeldIndex];
+            }
+            else
+            {
+                HeldCollection = new[] { dropContent.ImageName };
+                HeldIndex = 0;
+                HeldImageName = dropContent.ImageName;
+            }
+
             UpdateImage();
             DragBehaviour.SaveChanges();
         }
@@ -119,6 +138,8 @@ namespace GSTHD
                 HoldsImage = HoldsImage,
                 HeldImageName = HeldImageName,
                 ImageIndex = ImageIndex,
+                HeldCollection = HeldCollection,
+                HeldIndex = HeldIndex,
             };
         }
 
@@ -127,10 +148,23 @@ namespace GSTHD
             HoldsImage = state.HoldsImage;
             HeldImageName = state.HeldImageName;
             ImageIndex = state.ImageIndex;
+            HeldCollection = state.HeldCollection;
+            HeldIndex = state.HeldIndex;
         }
 
         public void IncrementState()
         {
+            if (HoldsImage && HeldCollection != null)
+            {
+                if (HeldIndex < HeldCollection.Length - 1)
+                {
+                    HeldIndex += 1;
+                    HeldImageName = HeldCollection[HeldIndex];
+                    UpdateImage();
+                }
+                return;
+            }
+
             RemoveImage = true;
             if (ImageIndex < ImageNames.Length - 1)
             {
@@ -145,6 +179,21 @@ namespace GSTHD
 
         public void DecrementState()
         {
+            if (HoldsImage && HeldCollection != null)
+            {
+                if (HeldIndex > 0)
+                {
+                    HeldIndex -= 1;
+                    HeldImageName = HeldCollection[HeldIndex];
+                    UpdateImage();
+                }
+                else
+                {
+                    RemoveImage = true;
+                }
+                return;
+            }
+
             RemoveImage = true;
             if (ImageIndex > 0)
             {
@@ -166,9 +215,17 @@ namespace GSTHD
 
         public void StartDragDrop()
         {
+            var dropContent = new DragDropContent(false, HeldImageName)
+            {
+                ImageCollection = HeldCollection,
+                ImageIndex = HeldIndex,
+            };
+
             HoldsImage = false;
+            HeldCollection = null;
+            HeldIndex = 0;
             UpdateImage();
-            var dropContent = new DragDropContent(false, HeldImageName);
+
             DoDragDrop(dropContent, DragDropEffects.Copy);
             SaveChanges();
         }
@@ -178,6 +235,8 @@ namespace GSTHD
             if (RemoveImage)
             {
                 HoldsImage = false;
+                HeldCollection = null;
+                HeldIndex = 0;
                 RemoveImage = false;
                 UpdateImage();
             }
